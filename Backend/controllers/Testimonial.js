@@ -127,6 +127,19 @@ exports.deleteTestimonial = async (req, res) => {
         message: "Testimonial not found",
       });
 
+    // If the testimonial has media, delete it from Cloudinary
+    if (testimonial.mediaUrl) {
+      // Extract public_id from the media URL (assuming public_id is stored)
+      const publicId = testimonial.mediaUrl.split("/").pop().split(".")[0];
+      console.log(publicId);
+      // Delete media from Cloudinary
+      await cloudinary.uploader.destroy(`Testimonials/${publicId}`, {
+        resource_type: testimonial.mediaType,
+        invalidate: true,
+      });
+    }
+
+    // Delete testimonial from the database
     await Testimonial.findByIdAndDelete(testimonialId);
     await Company.findByIdAndUpdate(testimonial.company, {
       $pull: { testimonials: testimonialId },
