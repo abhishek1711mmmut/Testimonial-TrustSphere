@@ -4,9 +4,10 @@ const TestimonialSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
-    photo: { type: String }, // Optional customer photo
     message: { type: String, required: true },
     rating: { type: Number, required: true },
+    mediaUrl: { type: String }, // URL of the uploaded photo or video
+    mediaType: { type: String }, // 'image' or 'video'
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
@@ -15,8 +16,5 @@ const TestimonialSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// Ensure the combination of company and email is unique
-TestimonialSchema.index({ company: 1, email: 1 }, { unique: true });
 
 module.exports = mongoose.model("Testimonial", TestimonialSchema);
