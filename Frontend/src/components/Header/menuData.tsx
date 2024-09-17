@@ -69,7 +69,7 @@ const profileMenuData: Menu[] = [
     id: 1,
     title: "Dashboard",
     newTab: false,
-    path: "/dashboard",
+    path: "/overview",
   },
   {
     id: 2,
@@ -79,7 +79,7 @@ const profileMenuData: Menu[] = [
   },
   {
     id: 3,
-    title: "Logout",
+    title: "Sign out",
     newTab: false,
     path: "/logout",
   },

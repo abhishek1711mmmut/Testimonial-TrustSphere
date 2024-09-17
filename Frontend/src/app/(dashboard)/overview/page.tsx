@@ -4,7 +4,7 @@ const DashboardPage = () => {
   return (
     <>
       <div className="rounded-lg border p-7 shadow-solid-3 transition-all dark:border-strokedark dark:bg-blacksection xl:p-12.5">
-        <h1>Welcome to Dashboard</h1>
+        <h1>Welcome to Overview</h1>
 
         <p className="text-body-color dark:text-body-color-dark text-base">
           This document serves as a simple template to showcase a sample layout
