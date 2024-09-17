@@ -111,10 +111,10 @@ const Footer = () => {
                     </li>
                     <li>
                       <Link
-                        href="#"
+                        href="/how-it-works"
                         className="mb-3 inline-block hover:text-primary"
                       >
-                        Pricing
+                        How it Works
                       </Link>
                     </li>
                   </ul>
@@ -160,12 +160,12 @@ const Footer = () => {
                       </Link>
                     </li>
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        href="/about"
                         className="mb-3 inline-block hover:text-primary"
                       >
-                        Press media
-                      </a>
+                        About Us
+                      </Link>
                     </li>
                     <li>
                       <a
@@ -306,6 +306,15 @@ const Footer = () => {
                 &copy; {new Date().getFullYear()} TrustSphere. All rights
                 reserved
               </p>
+              <i>Made by</i> <b>Abhishek</b> {" "}
+              <Link
+                href="https://github.com/abhishek1711mmmut"
+                target="_blank"
+                rel="noreferrer"
+                className="font-normal underline"
+              >
+                <i>GitHub</i>
+              </Link>
             </motion.div>
 
             <motion.div
@@ -375,7 +384,11 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="https://x.com/abhishek002kvs" target="_blank" aria-label="social icon">
+                  <a
+                    href="https://x.com/abhishek002kvs"
+                    target="_blank"
+                    aria-label="social icon"
+                  >
                     <svg
                       className="fill-[#D1D8E0] transition-all duration-300 hover:fill-primary"
                       width="24"

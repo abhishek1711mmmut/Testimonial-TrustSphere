@@ -28,13 +28,13 @@ const menuData: Menu[] = [
         id: 31,
         title: "Testimonials",
         newTab: false,
-        path: "/blog",
+        path: "/testimonials",
       },
       {
         id: 32,
         title: "About Us",
         newTab: false,
-        path: "/error",
+        path: "/about",
       },
       {
         id: 34,
@@ -64,4 +64,25 @@ const menuData: Menu[] = [
   },
 ];
 
-export default menuData;
+const profileMenuData: Menu[] = [
+  {
+    id: 1,
+    title: "Dashboard",
+    newTab: false,
+    path: "/dashboard",
+  },
+  {
+    id: 2,
+    title: "Settings",
+    newTab: false,
+    path: "/settings",
+  },
+  {
+    id: 3,
+    title: "Logout",
+    newTab: false,
+    path: "/logout",
+  },
+];
+
+export { menuData, profileMenuData };

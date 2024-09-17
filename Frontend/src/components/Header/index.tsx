@@ -2,38 +2,66 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import ThemeToggler from "./ThemeToggler";
-import menuData from "./menuData";
+import { menuData, profileMenuData} from "./menuData";
+import { menuitem } from "framer-motion/client";
 
 const Header = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
+  const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
+  const isLoggedIn = true;
 
+  const profileDropdownRef = useRef<HTMLDivElement | null>(null);
   const pathUrl = usePathname();
 
   // Sticky menu
-  const handleStickyMenu = () => {
-    if (window.scrollY >= 80) {
-      setStickyMenu(true);
-    } else {
-      setStickyMenu(false);
-    }
+  // const handleStickyMenu = () => {
+  //   if (window.scrollY >= 80) {
+  //     setStickyMenu(true);
+  //   } else {
+  //     setStickyMenu(false);
+  //   }
+  // };
+
+  // Toggle profile dropdown menu
+  const toggleProfileDropdown = () => {
+    setProfileDropdown(!profileDropdown);
   };
 
+  // Close profile dropdown menu when clicking outside
   useEffect(() => {
-    window.addEventListener("scroll", handleStickyMenu);
-    return () => window.removeEventListener("scroll", handleStickyMenu);
-  });
+    if (profileDropdownRef.current) {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          profileDropdownRef.current &&
+          !profileDropdownRef.current.contains(event.target as Node)
+        ) {
+          setProfileDropdown(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [profileDropdownRef]);
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleStickyMenu);
+  //   return () => window.removeEventListener("scroll", handleStickyMenu);
+  // });
 
   return (
     <header
-      className={`fixed left-0 top-0 z-99999 w-full py-7 ${
+      className={`fixed left-0 top-0 z-99999 w-full py-6 ${
         stickyMenu
           ? "bg-white !py-4 shadow transition duration-100 dark:bg-black"
-          : ""
+          : "bg-white dark:bg-black/90 backdrop-blur-lg"
       }`}
     >
       <div className="relative mx-auto max-w-c-1390 items-center justify-between px-4 md:px-8 xl:flex 2xl:px-0">
@@ -155,19 +183,61 @@ const Header = () => {
           <div className="mt-7 flex items-center gap-6 xl:mt-0">
             <ThemeToggler />
 
-            <Link
-              href="/auth/signin"
-              className="text-regular font-medium text-waterloo hover:text-primary"
-            >
-              Sign In
-            </Link>
+            {isLoggedIn ? (
+              <div className="relative" ref={profileDropdownRef}>
+                <button
+                  onClick={toggleProfileDropdown}
+                  className="flex cursor-pointer items-center justify-between gap-3 group hover:text-primary"
+                >
+                  <Image
+                    src="/images/user/user-02.png"
+                    alt="user"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  {/* {user?.name} */}
+                  Username
+                  <span className="text-meta">
+                    <svg
+                      className="h-3 w-3 cursor-pointer fill-waterloo group-hover:fill-primary"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8 -12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+                    </svg>
+                  </span>
+                </button>
 
-            <Link
-              href="/auth/signup"
-              className="flex items-center justify-center rounded-full bg-primary px-7.5 py-2.5 text-regular text-white duration-300 ease-in-out hover:bg-primaryho"
-            >
-              Sign Up
-            </Link>
+                {profileDropdown && (
+                  <ul className="absolute right-0 mt-2 w-48 rounded-lg border border-stroke bg-white p-2 shadow-solid-13 dark:border-strokedark dark:bg-blacksection dark:shadow-none">
+                    {
+                      profileMenuData.map((menuItem) => (
+                        <li key={menuItem.id} className="px-4 py-1 hover:text-primary">
+                          <Link href={menuItem.path || "#"} onClick={toggleProfileDropdown}>{menuItem.title}</Link>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/auth/signin"
+                  className="text-regular font-medium text-waterloo hover:text-primary"
+                >
+                  Sign In
+                </Link>
+
+                <Link
+                  href="/auth/signup"
+                  className="flex items-center justify-center rounded-full bg-primary px-7.5 py-2.5 text-regular text-white duration-300 ease-in-out hover:bg-primaryho"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
