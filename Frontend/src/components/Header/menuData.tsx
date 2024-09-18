@@ -69,13 +69,13 @@ const profileMenuData: Menu[] = [
     id: 1,
     title: "Dashboard",
     newTab: false,
-    path: "/overview",
+    path: "/dashboard/overview",
   },
   {
     id: 2,
     title: "Settings",
     newTab: false,
-    path: "/settings",
+    path: "/dashboard/settings",
   },
   {
     id: 3,

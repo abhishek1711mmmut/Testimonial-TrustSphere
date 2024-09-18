@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="sticky top-[74px] rounded-lg border p-4 shadow-solid-4 transition-all dark:border-strokedark dark:bg-blacksection">
+    <div className="sticky top-[74px] rounded-lg border p-4 shadow-solid-4 transition-all dark:border-strokedark bg-white dark:bg-blacksection">
       <ul className="space-y-2">
         {menuData.map((menuItem) => (
           <Link

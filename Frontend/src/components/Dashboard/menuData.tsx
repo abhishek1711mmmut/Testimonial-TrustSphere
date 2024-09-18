@@ -4,17 +4,17 @@ const menuData: Sidebar[] = [
   {
     id: 1,
     title: "Overview",
-    path: "/overview",
+    path: "/dashboard/overview",
   },
   {
     id: 2,
     title: "Inbox",
-    path: "/inbox",
+    path: "/dashboard/inbox",
   },
   {
     id: 3,
     title: "Embed & Metrics",
-    path: "/embed",
+    path: "/dashboard/embed",
   }
 ];
 
