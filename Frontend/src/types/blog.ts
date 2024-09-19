@@ -12,7 +12,7 @@ export type Blog = {
   slug?: string;
   metadata?: string;
   body?: string;
-  mainImage?: string;
+  mainImage: string;
   author?: Author;
   tags?: string[];
   publishedAt?: string;
