@@ -142,7 +142,7 @@ const About = () => {
               <p>
                 Our platform is packed with all the essential features you need
                 to showcase your customer feedback. From easy-to-use
-                integrations to customizable templates, we've got you covered.
+                integrations to customizable templates, we&apos;ve got you covered.
               </p>
               <div>
                 <a

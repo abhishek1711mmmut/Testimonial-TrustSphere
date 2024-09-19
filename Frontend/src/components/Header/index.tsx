@@ -5,27 +5,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
 import ThemeToggler from "./ThemeToggler";
-import { menuData, profileMenuData} from "./menuData";
-import { menuitem } from "framer-motion/client";
+import { menuData, profileMenuData } from "./menuData";
 
 const Header = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
-  const [stickyMenu, setStickyMenu] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
   const isLoggedIn = true;
 
   const profileDropdownRef = useRef<HTMLDivElement | null>(null);
   const pathUrl = usePathname();
-
-  // Sticky menu
-  // const handleStickyMenu = () => {
-  //   if (window.scrollY >= 80) {
-  //     setStickyMenu(true);
-  //   } else {
-  //     setStickyMenu(false);
-  //   }
-  // };
 
   // Toggle profile dropdown menu
   const toggleProfileDropdown = () => {
@@ -51,18 +40,9 @@ const Header = () => {
     }
   }, [profileDropdownRef]);
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleStickyMenu);
-  //   return () => window.removeEventListener("scroll", handleStickyMenu);
-  // });
-
   return (
     <header
-      className={`fixed left-0 top-0 z-999 w-full py-6 ${
-        stickyMenu
-          ? "bg-white !py-4 shadow transition duration-100 dark:bg-black"
-          : "bg-white dark:bg-black/90 backdrop-blur-lg"
-      }`}
+      className={`fixed left-0 top-0 z-999 w-full bg-white py-6 backdrop-blur-lg dark:bg-black/90`}
     >
       <div className="relative mx-auto max-w-c-1390 items-center justify-between px-4 md:px-8 xl:flex 2xl:px-0">
         <div className="flex w-full items-center justify-between xl:w-1/4">
@@ -187,7 +167,7 @@ const Header = () => {
               <div className="relative" ref={profileDropdownRef}>
                 <button
                   onClick={toggleProfileDropdown}
-                  className="flex cursor-pointer items-center justify-between gap-3 group hover:text-primary"
+                  className="group flex cursor-pointer items-center justify-between gap-3 hover:text-primary"
                 >
                   <Image
                     src="/images/user/user-02.png"
@@ -211,13 +191,19 @@ const Header = () => {
 
                 {profileDropdown && (
                   <ul className="absolute right-0 mt-2 w-48 rounded-lg border border-stroke bg-white p-2 shadow-solid-13 dark:border-strokedark dark:bg-blacksection dark:shadow-none">
-                    {
-                      profileMenuData.map((menuItem) => (
-                        <li key={menuItem.id} className="px-4 py-1 hover:text-primary">
-                          <Link href={menuItem.path || "#"} onClick={toggleProfileDropdown}>{menuItem.title}</Link>
-                        </li>
-                      ))
-                    }
+                    {profileMenuData.map((menuItem) => (
+                      <li
+                        key={menuItem.id}
+                        className="px-4 py-1 hover:text-primary"
+                      >
+                        <Link
+                          href={menuItem.path || "#"}
+                          onClick={toggleProfileDropdown}
+                        >
+                          {menuItem.title}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
