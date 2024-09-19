@@ -1,3 +1,4 @@
+"use client";
 // collect customers feedback from the space
 
 import { Metadata } from "next";
