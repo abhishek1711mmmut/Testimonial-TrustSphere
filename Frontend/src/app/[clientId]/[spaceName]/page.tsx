@@ -1,15 +1,15 @@
 "use client";
 // collect customers feedback from the space
 
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const metadata: Metadata = {
-    title: "Testimonial Page - TrustSphere",
-    description: "This is Testimonial page for TrustSphere",
-    // other metadata
-};
+// export const metadata: Metadata = {
+//     title: "Testimonial Page - TrustSphere",
+//     description: "This is Testimonial page for TrustSphere",
+//     // other metadata
+// };
 
 const TestimonialPage = ({
     params,
