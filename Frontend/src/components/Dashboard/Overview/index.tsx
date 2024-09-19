@@ -1,14 +1,34 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import CreateSpaceModal from "./CreateSpaceModal";
+import CreateSpaceModal from "./Modal/CreateSpaceModal";
+import OnSubmitModal from "./Modal/OnSubmitModal";
 
 const Overview = () => {
+  const variants = {
+    open: { opacity: 1, },
+    closed: { opacity: 0, },
+  }
   const length = 10;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isCreateSpaceModalOpen, setIsCreateSpaceModalOpen] =
+    useState<boolean>(false);
+  const [isOnSubmitModalOpen, setIsOnSubmitModalOpen] =
+    useState<boolean>(false);
 
   const onCreateSpaceClick = () => {
-    setIsOpen(true);
+    setIsCreateSpaceModalOpen(true);
+  };
+
+  const handleSubmitSpace = () => {
+    setIsCreateSpaceModalOpen(false);
+    // Optionally, add a delay before showing the success modal
+    setTimeout(() => {
+      setIsOnSubmitModalOpen(true);
+    }, 300); // Adjust the delay as needed
+  };
+
+  const onCloseOnSubmitModal = () => {
+    setIsOnSubmitModalOpen(false);
   };
 
   return (
@@ -70,7 +90,7 @@ const Overview = () => {
       </div>
 
       <button
-        className="flex w-fit items-center justify-between gap-2 self-end rounded-md bg-primary px-7 py-2.5 text-white duration-300 ease-in-out hover:bg-primaryho"
+        className="flex w-fit items-center justify-between gap-2 self-center sm:self-end rounded-md bg-primary px-7 py-2.5 text-white duration-300 ease-in-out hover:bg-primaryho"
         onClick={onCreateSpaceClick}
       >
         Create a new space
@@ -89,7 +109,16 @@ const Overview = () => {
       </button>
 
       {/* on clicking create new space, open modal which will collect information like company name, logo, some questions which are answered by customer */}
-      {isOpen && <CreateSpaceModal onClose={() => setIsOpen(false)} />}
+      {isCreateSpaceModalOpen && (
+        <CreateSpaceModal
+          onSubmit={handleSubmitSpace}
+          onClose={() => setIsCreateSpaceModalOpen(false)}
+        />
+      )}
+
+      {/* on clicking submit, open modal which will show success message */}
+      {isOnSubmitModalOpen && <OnSubmitModal onClose={onCloseOnSubmitModal} />}
+
       <div className="rounded-lg border bg-white p-7 shadow-solid-3 transition-all dark:border-strokedark dark:bg-blacksection">
         <h1 className="mb-6 pb-2 text-3xl font-bold text-black dark:text-white lg:text-4xl">
           Spaces

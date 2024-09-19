@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import { q } from "framer-motion/client";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
@@ -12,7 +11,12 @@ interface SpaceInfo {
   questions: string[];
 }
 
-const Modal = ({ onClose }: { onClose: () => void }) => {
+type ModalProps = {
+  onSubmit: () => void;
+  onClose: () => void;
+};
+
+const Modal = ({ onSubmit, onClose }: ModalProps) => {
   const [spaceInfo, setSpaceInfo] = useState<SpaceInfo>({
     spaceName: "",
     companyLogo: null,
@@ -48,6 +52,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     }));
   };
 
+  // Handler to update individual question
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Check if a file was actually selected before accessing files[0]
     if (event.target.files && event.target.files.length > 0) {
@@ -67,6 +72,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
+  // Handler to upload the company logo
   const handleUploadButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -76,6 +82,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     inputRef.current.click();
   };
 
+  // Handler to delete the company logo
   const handleDelete = () => {
     setSpaceInfo({ ...spaceInfo, companyLogo: null });
     // Reset the file input value (optional for some browsers)
@@ -85,11 +92,12 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
+  // Handler to submit the space information
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Handle the customer information here (e.g., send it to a server)
     console.log(spaceInfo);
-    onClose();
+    onSubmit();
   };
 
   return (
@@ -109,9 +117,8 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
           }}
           initial="hidden"
           whileInView="visible"
-          transition={{ duration: 1, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="animate_top relative z-1 mx-auto mt-28 w-[calc(100vw-10%)] max-w-c-1016 px-7.5 pb-7.5 pt-10 md:w-[calc(100vw-20%)] lg:px-15 lg:pt-15 xl:px-20 xl:pt-20"
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="relative z-1 mx-auto mt-28 w-[calc(100vw-10%)] max-w-c-1016 px-7.5 pb-7.5 pt-10 md:w-[calc(100vw-20%)] lg:px-15 lg:pt-15 xl:px-20 xl:pt-20"
         >
           {/* close button */}
           <button
@@ -267,7 +274,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
                     cols={40}
                     value={spaceInfo.customMessage}
                     onChange={handleChange}
-                    placeholder="Enter Custom Message"
+                    placeholder="Enter Custom Message like what you want to say about your company"
                     required
                     className="rounded-lg border-2 border-gray-300 bg-transparent px-3 py-2 outline-none focus:border-primary dark:border-strokedark dark:focus:border-primary"
                   ></textarea>
