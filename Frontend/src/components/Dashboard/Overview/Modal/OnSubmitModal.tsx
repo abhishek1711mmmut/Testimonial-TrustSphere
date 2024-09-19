@@ -3,9 +3,12 @@ import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 
 const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
+  // creating a temp clientId and spaceName for testing
+  const clientId = "123456789";
+  const spaceName = "StudyNotion";
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText("http://localhost:3000/dashboard/overview")
+      .writeText(`http://localhost:3000/${clientId}/${spaceName}`)
       .then(() => {
         toast.success("Copied to clipboard");
       });
@@ -53,7 +56,7 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
                   target="_blank"
                   className="max-w-[90%]"
                 >
-                  http://localhost:3000/dashboard/overview
+                  {`http://localhost:3000/${clientId}/${spaceName}`}
                 </Link>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

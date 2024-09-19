@@ -2,14 +2,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
-
-interface SpaceInfo {
-  spaceName: string;
-  companyLogo: File | null;
-  headerTitle: string;
-  customMessage: string;
-  questions: string[];
-}
+import { SpaceInfo } from "@/types/space";
 
 type ModalProps = {
   onSubmit: () => void;

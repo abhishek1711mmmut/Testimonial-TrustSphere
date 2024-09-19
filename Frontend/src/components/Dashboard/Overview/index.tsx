@@ -5,10 +5,6 @@ import CreateSpaceModal from "./Modal/CreateSpaceModal";
 import OnSubmitModal from "./Modal/OnSubmitModal";
 
 const Overview = () => {
-  const variants = {
-    open: { opacity: 1, },
-    closed: { opacity: 0, },
-  }
   const length = 10;
   const [isCreateSpaceModalOpen, setIsCreateSpaceModalOpen] =
     useState<boolean>(false);
