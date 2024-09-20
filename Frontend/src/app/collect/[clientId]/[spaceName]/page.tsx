@@ -8,7 +8,7 @@ const TestimonialPage = ({
   const { clientId, spaceName } = params;
 
   return (
-    <div className="pb-20 pt-40">
+    <div className="pt-20">
       <CollectFeedback clientId={clientId} spaceName={spaceName} />
     </div>
   );
