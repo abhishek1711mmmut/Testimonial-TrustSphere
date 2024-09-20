@@ -8,7 +8,7 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
   const spaceName = "StudyNotion";
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText(`http://localhost:3000/${clientId}/${spaceName}`)
+      .writeText(`http://localhost:3000/collect/${clientId}/${spaceName}`)
       .then(() => {
         toast.success("Copied to clipboard");
       });
