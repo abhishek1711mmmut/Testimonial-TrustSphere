@@ -18,7 +18,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
     questions: [
       "Who are you / what are you working on?",
       "How has [our product / service] helped you?",
-      "What is the best thing about [our product / service]",
+      "What is the best thing about [our product / service]?",
     ],
   });
 
@@ -76,7 +76,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
   };
 
   // Handler to delete the company logo
-  const handleDelete = () => {
+  const deleteCompanyLogo = () => {
     setSpaceInfo({ ...spaceInfo, companyLogo: null });
     // Reset the file input value (optional for some browsers)
     const companyLogoInput = inputRef.current;
@@ -175,9 +175,10 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
                   <div className="flex gap-4">
                     <div className="relative h-16 w-16 rounded-lg">
                       {spaceInfo.companyLogo && (
+                        // btn for deleting the company logo
                         <button
                           type="button"
-                          onClick={handleDelete}
+                          onClick={deleteCompanyLogo}
                           className="absolute -right-2 -top-2 z-10 rounded-full border border-blackho bg-white dark:bg-gray-400"
                         >
                           <svg
@@ -199,7 +200,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
                         </button>
                       )}
                       {/* displaying the preview of the company logo */}
-                      {spaceInfo.companyLogo ? (
+                      {spaceInfo.companyLogo && spaceInfo.companyLogo instanceof File ? (
                         <Image
                           src={URL.createObjectURL(spaceInfo.companyLogo)}
                           alt="company logo"

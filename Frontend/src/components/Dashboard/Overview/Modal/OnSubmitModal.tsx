@@ -26,7 +26,7 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
         transition={{ duration: 0.4, ease: "easeInOut" }}
         exit="closed"
       >
-        <div className="relative mx-auto mt-30 h-full w-full max-w-sm p-4 md:h-auto md:max-w-md">
+        <div className="relative mx-auto mt-30 h-full w-full max-w-sm p-4 md:h-auto md:max-w-md lg:max-w-lg">
           <div className="relative rounded-lg border border-gray-300 bg-white p-4 text-center shadow-solid-5 dark:border-strokedark dark:bg-gray-800 sm:p-5">
             <div className="mx-auto mb-3.5 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 p-2 dark:bg-green-900">
               <svg
@@ -50,13 +50,13 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
               <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
                 Here is the link for your customer:
               </p>
-              <div className="flex w-full justify-between rounded-md bg-gray-100 p-2 text-left text-sm text-primary dark:bg-blackho">
+              <div className="flex w-full justify-between items-center rounded-md bg-gray-100 p-2 text-left text-sm font-semibold text-primary dark:text-green-400/80 tracking-wide dark:bg-blackho">
                 <Link
                   href="/dashboard/overview"
                   target="_blank"
-                  className="max-w-[90%]"
+                  className="max-w-[90%] text-ellipsis overflow-hidden"
                 >
-                  {`http://localhost:3000/${clientId}/${spaceName}`}
+                  {`http://localhofhffjfjfjfjfjfjfjst:3000/${clientId}/${spaceName}`}
                 </Link>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

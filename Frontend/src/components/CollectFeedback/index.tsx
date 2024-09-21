@@ -1,17 +1,23 @@
 "use client";
 import Image from "next/image";
 import ThemeToggler from "../Header/ThemeToggler";
+import { useState } from "react";
+import TextModal from "./Modal/TextModal";
+import { SpaceInfo } from "@/types/space";
 
-const CollectFeedback = ({
+const ReviewForm = ({
   clientId,
   spaceName,
 }: {
   clientId: string;
   spaceName: string;
 }) => {
-  // create a temp spaceInfo object
-  const spaceInfo = {
-    spaceName:"StudyNotion",
+  const [openTextModal, setOpenTextModal] = useState(false);
+  // const [openVideoModal, setOpenVideoModal] = useState(false);
+
+  // create a temp spaceInfo object for testing
+  const spaceInfo: SpaceInfo = {
+    spaceName: "StudyNotion",
     companyLogo: "/images/logo/logo-dark.svg",
     headerTitle: "Join us",
     customMessage: "You will learn a lot",
@@ -21,12 +27,13 @@ const CollectFeedback = ({
       "What is the best thing about [our product / service]",
     ],
   };
+
   return (
     <>
       <header
-        className={`fixed left-0 top-0 z-999 w-full bg-white py-6 backdrop-blur-lg dark:bg-black/90`}
+        className={`fixed left-0 top-0 w-full bg-white py-6 backdrop-blur-lg dark:bg-black/90`}
       >
-        <div className="relative mx-auto max-w-c-1390 items-center justify-between px-4 md:px-8 flex 2xl:px-0">
+        <div className="relative mx-auto flex max-w-c-1390 items-center justify-between px-4 md:px-8 2xl:px-0">
           <div className="flex w-full items-center justify-between lg:w-1/4">
             <a href="/">
               <Image
@@ -48,18 +55,33 @@ const CollectFeedback = ({
           <ThemeToggler />
         </div>
       </header>
-      <section className="px-4 md:px-8 2xl:px-0">
+      <section className="relative px-4 md:px-8 2xl:px-0">
+        <div
+          className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+          aria-hidden="true"
+        >
+          <div
+            className="relative left-1/2 top-30 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 dark:opacity-15 sm:left-[calc(50%-30rem)] sm:w-[92.1875rem]"
+            style={{
+              clipPath:
+                "clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+            }}
+          ></div>
+        </div>
         <div className="relative mx-auto max-w-c-1390 px-7.5 pt-10 lg:px-15 xl:px-20">
           <div className="mx-auto max-w-3xl pb-6 text-center md:pb-16">
-            <div className="relative mb-4 inline-flex h-14 w-full flex-col justify-center md:mb-12">
-              <Image
-                loading="lazy"
-                src={spaceInfo.companyLogo}
-                alt="logo"
-                fill
-                className="mx-auto rounded-full object-contain"
-              />
-            </div>
+            {spaceInfo.companyLogo &&
+              typeof spaceInfo.companyLogo === "string" && (
+                <div className="relative mb-4 inline-flex h-14 w-full flex-col justify-center md:mb-12">
+                  <Image
+                    loading="lazy"
+                    src={spaceInfo.companyLogo}
+                    alt="logo"
+                    fill
+                    className="mx-auto rounded-full object-contain"
+                  />
+                </div>
+              )}
             <h1 className="mb-4 text-2xl font-extrabold text-gray-700 dark:text-gray-200 sm:text-4xl md:text-5xl">
               {spaceInfo.headerTitle}
             </h1>
@@ -101,7 +123,8 @@ const CollectFeedback = ({
                 </button>
                 <button
                   aria-label="Send rview in Text"
-                  className="text-body-color dark:text-body-color-dark dark:shadow-two mb-6 flex w-full items-center justify-center rounded-md border border-gray-300 bg-gray-100 px-6 py-3 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+                  onClick={() => setOpenTextModal(true)}
+                  className="dark:shadow-two mb-6 flex w-full items-center justify-center rounded-md border border-violet-400 bg-transparent px-6 py-3 text-base text-black outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:text-gray-300 dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
                 >
                   <span className="mr-3">
                     <svg
@@ -112,18 +135,26 @@ const CollectFeedback = ({
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                       ></path>
                     </svg>
                   </span>
                   Send in Text
                 </button>
+                {openTextModal && (
+                  <TextModal
+                    spaceInfo={spaceInfo}
+                    onClose={() => setOpenTextModal(false)}
+                  />
+                )}
               </div>
             </div>
-            <p>{clientId} {spaceName}</p>
+            <p>
+              {clientId} {spaceName}
+            </p>
           </div>
         </div>
       </section>
@@ -131,4 +162,4 @@ const CollectFeedback = ({
   );
 };
 
-export default CollectFeedback;
+export default ReviewForm;

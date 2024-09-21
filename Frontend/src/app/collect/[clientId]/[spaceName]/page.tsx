@@ -1,4 +1,4 @@
-import CollectFeedback from "@/components/CollectFeedback";
+import ReviewForm from "@/components/CollectFeedback";
 
 const TestimonialPage = ({
   params,
@@ -9,7 +9,7 @@ const TestimonialPage = ({
 
   return (
     <div className="pt-20">
-      <CollectFeedback clientId={clientId} spaceName={spaceName} />
+      <ReviewForm clientId={clientId} spaceName={spaceName} />
     </div>
   );
 };
