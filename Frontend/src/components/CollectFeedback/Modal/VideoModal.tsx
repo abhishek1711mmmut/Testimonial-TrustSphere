@@ -27,7 +27,7 @@ const VideoModal = ({
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const [recordedVideo, setRecordedVideo] = useState<string | null>(null);
   const [uploadedVideo, setUploadedVideo] = useState<string | null>(null); // For uploaded video
-  const [cameraPermission, setCameraPermission] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]); // Store the recorded chunks
@@ -37,19 +37,20 @@ const VideoModal = ({
 
   const startWebcam = async () => {
     try {
-      console.log("started webcam");
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
       });
-      setMediaStream(stream);
       setCameraPermission(true);
+      setMediaStream(stream);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        console.log(4);
       }
     } catch (error) {
       console.error("Error accessing webcam and microphone: ", error);
       setCameraPermission(false);
+      toast.error("Error accessing webcam and microphone");
     }
   };
 
@@ -350,7 +351,7 @@ const VideoModal = ({
                     </div>
                   )}
               </div>
-              {!cameraPermission ? (
+              {!cameraPermission && (
                 <div className="relative my-2 rounded-lg bg-white shadow dark:bg-gray-700">
                   <div className="p-4 text-center md:p-5">
                     <svg
@@ -373,240 +374,245 @@ const VideoModal = ({
                     </h3>
                   </div>
                 </div>
-              ) : (
-                <>
-                  <p className="mb-4 text-center text-sm text-gray-500 dark:text-gray-400 sm:px-4">
-                    You have up to 120 seconds to record your video. Don&apos;t
-                    worry: You can review your video before submitting it, and
-                    you can re-record if needed.
-                  </p>
-                  {/* question section */}
-                  <section>
-                    {spaceInfo.questions.length > 0 && (
-                      <div className="mx-auto px-4 py-4 text-left">
-                        <h3 className="mb-2 text-lg font-semibold uppercase leading-6 text-gray-700 dark:text-gray-300">
-                          question
-                        </h3>
-                        <div className="mb-2 w-10 border-b-4 border-strokedark dark:border-stroke"></div>
-                        <ul className="mt-2 flex max-w-xl list-disc flex-col gap-1 pl-4 text-base text-gray-500 dark:text-manatee">
-                          {spaceInfo.questions.map((question, index) => (
-                            <li key={index}>{question}</li>
-                          ))}
-                        </ul>
+              )}
+              <div>
+                <p className="mb-4 text-center text-sm text-gray-500 dark:text-gray-400 sm:px-4">
+                  You have up to 120 seconds to record your video. Don&apos;t
+                  worry: You can review your video before submitting it, and you
+                  can re-record if needed.
+                </p>
+                {/* question section */}
+                <section>
+                  {spaceInfo.questions.length > 0 && (
+                    <div className="mx-auto px-4 py-4 text-left">
+                      <h3 className="mb-2 text-lg font-semibold uppercase leading-6 text-gray-700 dark:text-gray-300">
+                        question
+                      </h3>
+                      <div className="mb-2 w-10 border-b-4 border-strokedark dark:border-stroke"></div>
+                      <ul className="mt-2 flex max-w-xl list-disc flex-col gap-1 pl-4 text-base text-gray-500 dark:text-manatee">
+                        {spaceInfo.questions.map((question, index) => (
+                          <li key={index}>{question}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {/* webcam section */}
+                  <div className="relative mb-4">
+                    {!recordedVideo && !uploadedVideo && (
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        className="h-auto w-full rounded-xl dark:bg-black"
+                      />
+                    )}
+
+                    {recordedVideo && (
+                      <video
+                        src={recordedVideo}
+                        controls
+                        className="h-auto w-full rounded-xl border border-strokedark dark:bg-black"
+                      />
+                    )}
+                    {uploadedVideo && (
+                      <video
+                        src={uploadedVideo}
+                        controls
+                        className="h-auto w-full rounded-xl border border-strokedark dark:bg-black"
+                      />
+                    )}
+                    {/* Countdown timer */}
+                    {isRecording && (
+                      <div className="absolute right-0 top-0 m-2 rounded-md bg-red-500 bg-opacity-75 p-1 text-sm text-white">
+                        {formatTime(countdown)}
                       </div>
                     )}
-                  </section>
-                  <form
-                    onSubmit={handleSubmit}
-                    className="mb-4 flex flex-col gap-5"
-                  >
-                    <div className="relative">
-                      {!recordedVideo && !uploadedVideo && (
-                        <video
-                          ref={videoRef}
-                          autoPlay
-                          className="h-auto w-full rounded-xl"
-                        />
-                      )}
-
-                      {recordedVideo && (
-                        <video
-                          src={recordedVideo}
-                          controls
-                          className="h-auto w-full rounded-xl border border-strokedark"
-                        />
-                      )}
-                      {uploadedVideo && (
-                        <video
-                          src={uploadedVideo}
-                          controls
-                          className="h-auto w-full rounded-xl border border-strokedark"
-                        />
-                      )}
-                      {/* Countdown timer */}
-                      {isRecording && (
-                        <div className="absolute right-0 top-0 m-2 rounded-md bg-red-500 bg-opacity-75 p-1 text-sm text-white">
-                          {formatTime(countdown)}
-                        </div>
-                      )}
-                    </div>
-                    {!isRecorded && (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex flex-wrap justify-evenly">
-                          <button
-                            onClick={startRecording}
-                            type="button"
-                            disabled={isRecording}
-                            className={`flex items-center justify-center self-center rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primaryho focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:bg-primary/50 disabled:text-waterloo dark:focus:ring-blue-800`}
-                          >
-                            Start Recording
-                          </button>
-                          <button
-                            onClick={stopRecording}
-                            type="button"
-                            disabled={!isRecording}
-                            className={`inline-flex items-center justify-center self-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:bg-red-600/50 disabled:text-waterloo dark:focus:ring-red-800`}
-                          >
-                            Stop Recording
-                          </button>
-                        </div>
+                  </div>
+                  {/* start and stop recording section */}
+                  {!isRecorded && (
+                    <div className="flex flex-col gap-2 my-2">
+                      <div className="flex flex-wrap justify-evenly">
                         <button
+                          onClick={startRecording}
                           type="button"
-                          className={`inline-flex items-center justify-center self-center`}
-                          onClick={() => videoFileInputRef.current?.click()}
+                          disabled={isRecording}
+                          className={`flex items-center justify-center self-center rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primaryho focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:bg-primary/50 disabled:text-waterloo dark:focus:ring-blue-800`}
                         >
-                          or choose a file to submit
+                          Start Recording
                         </button>
-                        <input
-                          type="file"
-                          ref={videoFileInputRef}
-                          accept="video/mp4,video/x-m4v,video/*"
-                          onChange={handleUploadVideo}
-                          hidden
-                        />
+                        <button
+                          onClick={stopRecording}
+                          type="button"
+                          disabled={!isRecording}
+                          className={`inline-flex items-center justify-center self-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:bg-red-600/50 disabled:text-waterloo dark:focus:ring-red-800`}
+                        >
+                          Stop Recording
+                        </button>
                       </div>
-                    )}
-
-                    {isRecorded && (
-                      <button
-                        onClick={handleRecordAgain}
-                        className="flex items-center justify-center self-center rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primaryho focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:bg-primary/50 disabled:text-waterloo dark:focus:ring-blue-800"
-                      >
-                        Record Again
-                      </button>
-                    )}
-                    {/* rating section */}
-                    <Rating
-                      onChange={(rating) =>
-                        setVideoReviewData((prevInfo) => ({
-                          ...prevInfo,
-                          rating,
-                        }))
-                      }
-                    />
-
-                    {/* reviewer name section */}
-                    <div>
-                      <label
-                        htmlFor="reviewerName"
-                        className="mb-2 block px-4 text-left text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Your Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="reviewerName"
-                        id="reviewerName"
-                        value={videoReviewData.reviewerName}
-                        onChange={handleChange}
-                        placeholder="name"
-                        maxLength={50}
-                        required
-                        className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                      />
                     </div>
-                    {/* reviewer email section */}
-                    <div>
-                      <label
-                        htmlFor="reviewerEmail"
-                        className="mb-2 block px-4 text-left text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Your Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        name="reviewerEmail"
-                        id="reviewerEmail"
-                        value={videoReviewData.reviewerEmail}
-                        onChange={handleChange}
-                        placeholder="Email"
-                        required
-                        className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                      />
-                    </div>
-                    {/* reviewer image section */}
+                  )}
+                </section>
+                <form
+                  onSubmit={handleSubmit}
+                  className="mb-4 flex flex-col gap-5"
+                >
+                  {!isRecorded && (
                     <div className="flex flex-col gap-2">
-                      <label
-                        // htmlFor="reviewerImage"
-                        className="mb-2 block px-4 text-left text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Upload Your Photo{" "}
-                        <span className="text-gray-500">(Optional)</span>
-                      </label>
-                      <div className="flex gap-4">
-                        <div className="relative z-0 h-16 w-16 rounded-full">
-                          {/* displaying the preview of the reviewer image */}
-                          {videoReviewData.reviewerImage &&
-                          videoReviewData.reviewerImage instanceof File ? (
-                            <Image
-                              src={URL.createObjectURL(
-                                videoReviewData.reviewerImage,
-                              )}
-                              alt="your photo"
-                              fill
-                              className="rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="h-full w-full rounded-full bg-gray-300 dark:bg-gray-700"></div>
-                          )}
-                        </div>
-                        {/* reviewer image upload button */}
-                        <button
-                          type="button"
-                          onClick={uploadUserImageButtonClick}
-                          className="self-center rounded-md border border-strokedark px-2 py-1 text-black dark:border-stroke dark:text-gray-300"
-                        >
-                          {videoReviewData.reviewerImage
-                            ? "Change File"
-                            : "Select File"}
-                        </button>
-                        <input
-                          type="file"
-                          //   id="reviewerImage"
-                          name="reviewerImage"
-                          accept="image/*"
-                          ref={reviewerImageRef}
-                          onChange={handleFileChange}
-                          hidden
-                        />
-                      </div>
-                    </div>
-                    {/* link checkbox */}
-                    <div className="flex gap-4 px-4">
-                      <input
-                        id="link-checkbox"
-                        type="checkbox"
-                        value=""
-                        className="h-5 w-5"
-                        required
-                      />
-                      <label
-                        htmlFor="link-checkbox"
-                        className="ms-2 text-left text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        I give permission to use this testimonial across social
-                        channels and other marketing efforts.
-                      </label>
-                    </div>
-                    {/* cancel and submit button */}
-                    <div className="mr-2 flex justify-end gap-4">
                       <button
                         type="button"
-                        onClick={handleClose}
-                        className="mb-2 me-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+                        className={`inline-flex items-center justify-center self-center`}
+                        onClick={() => videoFileInputRef.current?.click()}
                       >
-                        Cancel
+                        or choose a file to submit
                       </button>
-                      <button
-                        type="submit"
-                        className="mb-2 me-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
-                      >
-                        Submit
-                      </button>
+                      <input
+                        type="file"
+                        ref={videoFileInputRef}
+                        accept="video/mp4,video/x-m4v,video/*"
+                        onChange={handleUploadVideo}
+                        hidden
+                      />
                     </div>
-                  </form>
-                </>
-              )}
+                  )}
+
+                  {isRecorded && (
+                    <button
+                      onClick={handleRecordAgain}
+                      className="flex items-center justify-center self-center rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primaryho focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:bg-primary/50 disabled:text-waterloo dark:focus:ring-blue-800"
+                    >
+                      Record Again
+                    </button>
+                  )}
+                  {/* rating section */}
+                  <Rating
+                    onChange={(rating) =>
+                      setVideoReviewData((prevInfo) => ({
+                        ...prevInfo,
+                        rating,
+                      }))
+                    }
+                  />
+
+                  {/* reviewer name section */}
+                  <div>
+                    <label
+                      htmlFor="reviewerName"
+                      className="mb-2 block px-4 text-left text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Your Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="reviewerName"
+                      id="reviewerName"
+                      value={videoReviewData.reviewerName}
+                      onChange={handleChange}
+                      placeholder="name"
+                      maxLength={50}
+                      required
+                      className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    />
+                  </div>
+                  {/* reviewer email section */}
+                  <div>
+                    <label
+                      htmlFor="reviewerEmail"
+                      className="mb-2 block px-4 text-left text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Your Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="reviewerEmail"
+                      id="reviewerEmail"
+                      value={videoReviewData.reviewerEmail}
+                      onChange={handleChange}
+                      placeholder="Email"
+                      required
+                      className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    />
+                  </div>
+                  {/* reviewer image section */}
+                  <div className="flex flex-col gap-2">
+                    <label
+                      // htmlFor="reviewerImage"
+                      className="mb-2 block px-4 text-left text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Upload Your Photo{" "}
+                      <span className="text-gray-500">(Optional)</span>
+                    </label>
+                    <div className="flex gap-4">
+                      <div className="relative z-0 h-16 w-16 rounded-full">
+                        {/* displaying the preview of the reviewer image */}
+                        {videoReviewData.reviewerImage &&
+                        videoReviewData.reviewerImage instanceof File ? (
+                          <Image
+                            src={URL.createObjectURL(
+                              videoReviewData.reviewerImage,
+                            )}
+                            alt="your photo"
+                            fill
+                            className="rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-full w-full rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                        )}
+                      </div>
+                      {/* reviewer image upload button */}
+                      <button
+                        type="button"
+                        onClick={uploadUserImageButtonClick}
+                        className="self-center rounded-md border border-strokedark px-2 py-1 text-black dark:border-stroke dark:text-gray-300"
+                      >
+                        {videoReviewData.reviewerImage
+                          ? "Change File"
+                          : "Select File"}
+                      </button>
+                      <input
+                        type="file"
+                        //   id="reviewerImage"
+                        name="reviewerImage"
+                        accept="image/*"
+                        ref={reviewerImageRef}
+                        onChange={handleFileChange}
+                        hidden
+                      />
+                    </div>
+                  </div>
+                  {/* link checkbox */}
+                  <div className="flex gap-4 px-4">
+                    <input
+                      id="link-checkbox"
+                      type="checkbox"
+                      value=""
+                      className="h-5 w-5"
+                      required
+                    />
+                    <label
+                      htmlFor="link-checkbox"
+                      className="ms-2 text-left text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      I give permission to use this testimonial across social
+                      channels and other marketing efforts.
+                    </label>
+                  </div>
+                  {/* cancel and submit button */}
+                  <div className="mr-2 flex justify-end gap-4">
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className="mb-2 me-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="mb-2 me-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </motion.div>
