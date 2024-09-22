@@ -477,107 +477,105 @@ const TextModal = ({
 export default TextModal;
 
 // Memoized component for image preview so that it only re-renders when the selected image changes and avoiding unnecessary re-renders
-const ImagePreview = memo(
-  ({
-    attachedImages,
-    onDelete,
-  }: {
-    attachedImages: File[];
-    onDelete: (index: number) => void;
-  }) => {
-    const [selectedId, setSelectedId] = useState(""); // State to store the selected attached image
+const ImagePreview = memo(function ImagePreview({
+  attachedImages,
+  onDelete,
+}: {
+  attachedImages: File[];
+  onDelete: (index: number) => void;
+}) {
+  const [selectedId, setSelectedId] = useState(""); // State to store the selected attached image
 
-    const deleteSingleAttachedImage = (index: number) => {
-      onDelete(index);
-      setSelectedId("");
-    };
-    return (
-      <motion.div className="z-1 mt-2 flex flex-wrap gap-4">
-        {attachedImages.length > 0 &&
-          attachedImages.map((image, index) => (
-            <motion.div
-              layoutId={`card-container-${index}`}
-              key={index}
-              variants={{
-                hidden: {
-                  opacity: 0,
-                  x: -20,
-                },
+  const deleteSingleAttachedImage = (index: number) => {
+    onDelete(index);
+    setSelectedId("");
+  };
+  return (
+    <motion.div className="z-1 mt-2 flex flex-wrap gap-4">
+      {attachedImages.length > 0 &&
+        attachedImages.map((image, index) => (
+          <motion.div
+            layoutId={`card-container-${index}`}
+            key={index}
+            variants={{
+              hidden: {
+                opacity: 0,
+                x: -20,
+              },
 
-                visible: {
-                  opacity: 1,
-                  x: 0,
-                },
-              }}
-              initial="hidden"
-              whileInView="visible"
-              transition={{ duration: 0.3 }}
-              className="animate_right relative h-16 w-16 rounded-lg bg-black"
+              visible: {
+                opacity: 1,
+                x: 0,
+              },
+            }}
+            initial="hidden"
+            whileInView="visible"
+            transition={{ duration: 0.3 }}
+            className="animate_right relative h-16 w-16 rounded-lg bg-black"
+          >
+            <Image
+              loading="lazy"
+              src={URL.createObjectURL(image)}
+              alt="attached image"
+              fill
+              className="cursor-zoom-in rounded-lg bg-black object-cover"
+              onClick={() => setSelectedId(index.toString())}
+              quality={50}
+            />
+            <button
+              type="button"
+              className="absolute -right-2 -top-2 rounded-full border border-blackho bg-white dark:bg-gray-400"
+              onClick={() => deleteSingleAttachedImage(index)}
             >
-              <Image
-                loading="lazy"
-                src={URL.createObjectURL(image)}
-                alt="attached image"
-                fill
-                className="cursor-zoom-in rounded-lg bg-black object-cover"
-                onClick={() => setSelectedId(index.toString())}
-                quality={50}
-              />
-              <button
-                type="button"
-                className="absolute -right-2 -top-2 rounded-full border border-blackho bg-white dark:bg-gray-400"
-                onClick={() => deleteSingleAttachedImage(index)}
+              {/* delete icon svg */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                color="#000000"
+                fill="none"
               >
-                {/* delete icon svg */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  color="#000000"
-                  fill="none"
-                >
-                  <path
-                    d="M18 6L12 12M12 12L6 18M12 12L18 18M12 12L6 6"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </motion.div>
-          ))}
-        <AnimatePresence>
-          {selectedId && (
-            <motion.div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              {attachedImages.map(
-                (image, index) =>
-                  index.toString() === selectedId && (
-                    <motion.div
-                      className="relative max-h-[80vh] max-w-[90vw]"
-                      layoutId={`card-container-${index}`}
-                      key={index}
+                <path
+                  d="M18 6L12 12M12 12L6 18M12 12L18 18M12 12L6 6"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </motion.div>
+        ))}
+      <AnimatePresence>
+        {selectedId && (
+          <motion.div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            {attachedImages.map(
+              (image, index) =>
+                index.toString() === selectedId && (
+                  <motion.div
+                    className="relative max-h-[80vh] max-w-[90vw]"
+                    layoutId={`card-container-${index}`}
+                    key={index}
+                  >
+                    <motion.button
+                      type="button"
+                      className="absolute right-2 top-2 rounded-full bg-red-500 px-2 py-1 text-center text-white"
+                      onClick={() => setSelectedId("")}
                     >
-                      <motion.button
-                        type="button"
-                        className="absolute right-2 top-2 rounded-full bg-red-500 px-2 py-1 text-center text-white"
-                        onClick={() => setSelectedId("")}
-                      >
-                        Close
-                      </motion.button>
+                      Close
+                    </motion.button>
 
-                      <motion.img
-                        src={URL.createObjectURL(image)}
-                        className="max-h-[80vh] w-full rounded-lg"
-                      />
-                    </motion.div>
-                  ),
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    );
-  },
-);
+                    <motion.img
+                      src={URL.createObjectURL(image)}
+                      className="max-h-[80vh] w-full rounded-lg"
+                    />
+                  </motion.div>
+                ),
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+});

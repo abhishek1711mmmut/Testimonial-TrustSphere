@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use, useCallback } from "react";
 import Rating from "./Rating";
 import { SpaceInfo, VideoReview } from "@/types/reviewSpace";
 import toast from "react-hot-toast";
@@ -52,12 +52,12 @@ const VideoModal = ({
     }
   };
 
-  const stopWebcam = () => {
+  const stopWebcam = useCallback(() => {
     if (mediaStream) {
       mediaStream.getTracks().forEach((track) => track.stop());
       setMediaStream(null); // Clear mediaStream state
     }
-  };
+  }, [mediaStream]);
 
   const startRecording = () => {
     if (mediaStream) {
@@ -375,7 +375,7 @@ const VideoModal = ({
               ) : (
                 <>
                   <p className="mb-4 text-center text-sm text-gray-500 dark:text-gray-400 sm:px-4">
-                    You have up to 120 seconds to record your video. Don’t
+                    You have up to 120 seconds to record your video. Don&apos;t
                     worry: You can review your video before submitting it, and
                     you can re-record if needed.
                   </p>
