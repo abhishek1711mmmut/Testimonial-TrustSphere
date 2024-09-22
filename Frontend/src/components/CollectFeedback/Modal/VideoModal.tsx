@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState, useRef, useEffect, use, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Rating from "./Rating";
 import { SpaceInfo, VideoReview } from "@/types/reviewSpace";
 import toast from "react-hot-toast";
@@ -154,7 +154,7 @@ const VideoModal = ({
       stopWebcam();
       clearInterval(countdownIntervalRef.current!); // Clear countdown on component unmount
     };
-  }, []);
+  }, [stopWebcam]);
 
   // Handler to change te input value
   const handleChange = (
