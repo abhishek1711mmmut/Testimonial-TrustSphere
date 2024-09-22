@@ -15,6 +15,7 @@ const Rating = ({ onChange }: { onChange: (rating: number) => void }) => {
           name="hs-ratings-readonly"
           value="5"
           onChange={handleRatingChange}
+          required
           // checked={selectedRating === 1}
         />
         <label
@@ -39,6 +40,7 @@ const Rating = ({ onChange }: { onChange: (rating: number) => void }) => {
           name="hs-ratings-readonly"
           value="4"
           onChange={handleRatingChange}
+          required
         />
         <label
           htmlFor="hs-ratings-readonly-2"
@@ -62,6 +64,7 @@ const Rating = ({ onChange }: { onChange: (rating: number) => void }) => {
           name="hs-ratings-readonly"
           value="3"
           onChange={handleRatingChange}
+          required
         />
         <label
           htmlFor="hs-ratings-readonly-3"
@@ -85,6 +88,7 @@ const Rating = ({ onChange }: { onChange: (rating: number) => void }) => {
           name="hs-ratings-readonly"
           value="2"
           onChange={handleRatingChange}
+          required
         />
         <label
           htmlFor="hs-ratings-readonly-4"
@@ -108,6 +112,7 @@ const Rating = ({ onChange }: { onChange: (rating: number) => void }) => {
           name="hs-ratings-readonly"
           value="1"
           onChange={handleRatingChange}
+          required
         />
         <label
           htmlFor="hs-ratings-readonly-5"

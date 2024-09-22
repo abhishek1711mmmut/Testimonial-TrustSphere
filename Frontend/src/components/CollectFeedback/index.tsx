@@ -3,7 +3,8 @@ import Image from "next/image";
 import ThemeToggler from "../Header/ThemeToggler";
 import { useState } from "react";
 import TextModal from "./Modal/TextModal";
-import { SpaceInfo } from "@/types/space";
+import { SpaceInfo } from "@/types/reviewSpace";
+import VideoModal from "./Modal/VideoModal";
 
 const ReviewForm = ({
   clientId,
@@ -13,7 +14,7 @@ const ReviewForm = ({
   spaceName: string;
 }) => {
   const [openTextModal, setOpenTextModal] = useState(false);
-  // const [openVideoModal, setOpenVideoModal] = useState(false);
+  const [openVideoModal, setOpenVideoModal] = useState(false);
 
   // create a temp spaceInfo object for testing
   const spaceInfo: SpaceInfo = {
@@ -107,6 +108,7 @@ const ReviewForm = ({
               <div className="mx-auto max-w-xs gap-6 sm:flex sm:max-w-none sm:justify-center">
                 <button
                   aria-label="Record review Video"
+                  onClick={() => setOpenVideoModal(true)}
                   className="dark:shadow-two mb-6 flex w-full items-center justify-center rounded-md border border-stroke bg-primary px-6 py-3 text-base text-white outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-primary dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
                 >
                   <span className="mr-3">
@@ -121,6 +123,12 @@ const ReviewForm = ({
                   </span>
                   Record a Video
                 </button>
+                {openVideoModal && (
+                  <VideoModal
+                    spaceInfo={spaceInfo}
+                    onClose={() => setOpenVideoModal(false)}
+                  />
+                )}
                 <button
                   aria-label="Send rview in Text"
                   onClick={() => setOpenTextModal(true)}

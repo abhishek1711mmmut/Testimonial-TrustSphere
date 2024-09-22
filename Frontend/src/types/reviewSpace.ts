@@ -1,6 +1,6 @@
 export type SpaceInfo = {
   spaceName: string;
-  companyLogo: File | null | String;
+  companyLogo: File | null | string;
   headerTitle: string;
   customMessage: string;
   questions: string[];

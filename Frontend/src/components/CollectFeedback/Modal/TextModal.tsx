@@ -1,4 +1,4 @@
-import { SpaceInfo, TextReview } from "@/types/space";
+import { SpaceInfo, TextReview } from "@/types/reviewSpace";
 import Image from "next/image";
 import { useState, useRef, memo, useCallback } from "react";
 import Rating from "./Rating";
@@ -475,7 +475,6 @@ const TextModal = ({
 };
 
 export default TextModal;
-
 
 // Memoized component for image preview so that it only re-renders when the selected image changes and avoiding unnecessary re-renders
 const ImagePreview = memo(

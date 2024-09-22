@@ -14,7 +14,8 @@ const ToasterContext = () => {
             color: "#fff",
             height: "50px",
             padding: "10px",
-            fontSize: "16px"
+            fontSize: "16px",
+            marginRight: "15px",
           },
         }}
       />

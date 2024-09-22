@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { SpaceInfo } from "@/types/space";
+import { SpaceInfo } from "@/types/reviewSpace";
 
 type ModalProps = {
   onSubmit: () => void;
@@ -100,7 +100,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
           variants={{
             hidden: {
               opacity: 0,
-              y: -20,
+              y: 20,
             },
 
             visible: {
@@ -110,7 +110,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
           }}
           initial="hidden"
           whileInView="visible"
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.3, ease: "easeIn" }}
           className="relative z-1 mx-auto mt-28 w-[calc(100vw-10%)] max-w-c-1016 px-7.5 pb-7.5 pt-10 md:w-[calc(100vw-20%)] lg:px-15 lg:pt-15 xl:px-20 xl:pt-20"
         >
           {/* close button */}
