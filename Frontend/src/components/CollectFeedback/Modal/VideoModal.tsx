@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import Rating from "./Rating";
 import { SpaceInfo, VideoReview } from "@/types/reviewSpace";
 import toast from "react-hot-toast";
