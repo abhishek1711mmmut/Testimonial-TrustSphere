@@ -37,6 +37,7 @@ const VideoModal = ({
 
   const startWebcam = async () => {
     try {
+      console.log("started webcam");
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
@@ -52,12 +53,12 @@ const VideoModal = ({
     }
   };
 
-  const stopWebcam = useCallback(() => {
+  const stopWebcam = () => {
     if (mediaStream) {
       mediaStream.getTracks().forEach((track) => track.stop());
       setMediaStream(null); // Clear mediaStream state
     }
-  }, [mediaStream]);
+  };
 
   const startRecording = () => {
     if (mediaStream) {
@@ -129,7 +130,7 @@ const VideoModal = ({
 
       videoElement.onloadedmetadata = () => {
         // Check if the video is a valid video file
-        if (videoElement.duration > 10) {
+        if (videoElement.duration > 120) {
           toast.error("Video duration must be less than 2 min");
           setUploadedVideo(null); // Clear the video
           videoFileInputRef.current!.value = ""; // Reset file input
@@ -154,7 +155,7 @@ const VideoModal = ({
       stopWebcam();
       clearInterval(countdownIntervalRef.current!); // Clear countdown on component unmount
     };
-  }, [stopWebcam]);
+  }, []);
 
   // Handler to change te input value
   const handleChange = (
