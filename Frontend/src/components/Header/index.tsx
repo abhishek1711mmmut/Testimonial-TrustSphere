@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 
 import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
 
 const Header = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
@@ -24,23 +25,7 @@ const Header = () => {
   };
 
   // Close profile dropdown menu when clicking outside
-  useEffect(() => {
-    if (profileDropdownRef.current) {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          profileDropdownRef.current &&
-          !profileDropdownRef.current.contains(event.target as Node)
-        ) {
-          setProfileDropdown(false);
-        }
-      };
-
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }
-  }, [profileDropdownRef]);
+  useOnClickOutside(profileDropdownRef, null, () => setProfileDropdown(false));
 
   return (
     <>

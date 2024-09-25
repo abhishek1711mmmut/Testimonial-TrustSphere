@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import Rating from "./Rating";
-import { SpaceInfo, VideoReview } from "@/types/reviewSpace";
+import { SpaceInfo, Review } from "@/types/reviewSpace";
 import toast from "react-hot-toast";
 
 const VideoModal = ({
@@ -12,7 +12,9 @@ const VideoModal = ({
   onClose: () => void;
   spaceInfo: SpaceInfo;
 }) => {
-  const [videoReviewData, setVideoReviewData] = useState<VideoReview>({
+  const [videoReviewData, setVideoReviewData] = useState<
+    Omit<Review, "review" | "attachedImages">
+  >({
     rating: 0,
     reviewerName: "",
     reviewerEmail: "",
@@ -429,7 +431,7 @@ const VideoModal = ({
                   </div>
                   {/* start and stop recording section */}
                   {!isRecorded && (
-                    <div className="flex flex-col gap-2 my-2">
+                    <div className="my-2 flex flex-col gap-2">
                       <div className="flex flex-wrap justify-evenly">
                         <button
                           onClick={startRecording}

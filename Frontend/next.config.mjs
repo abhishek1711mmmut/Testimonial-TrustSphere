@@ -10,6 +10,16 @@ const nextConfig = {
         port: "",
         // pathname: '/account123/**',
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+      }
     ],
   },
 };

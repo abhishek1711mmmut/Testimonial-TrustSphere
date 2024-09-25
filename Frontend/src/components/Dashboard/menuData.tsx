@@ -13,7 +13,7 @@ const menuData: Sidebar[] = [
   },
   {
     id: 3,
-    title: "Embed & Metrics",
+    title: "Embed & Scripts",
     path: "/dashboard/embed",
   }
 ];

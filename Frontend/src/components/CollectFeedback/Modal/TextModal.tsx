@@ -1,4 +1,4 @@
-import { SpaceInfo, TextReview } from "@/types/reviewSpace";
+import { SpaceInfo, Review } from "@/types/reviewSpace";
 import Image from "next/image";
 import { useState, useRef, memo, useCallback } from "react";
 import Rating from "./Rating";
@@ -11,7 +11,8 @@ const TextModal = ({
   spaceInfo: SpaceInfo;
   onClose: () => void;
 }) => {
-  const [textReviewData, setTextReviewData] = useState<TextReview>({
+  // omit video from text review data
+  const [textReviewData, setTextReviewData] = useState<Omit<Review, "video">>({
     rating: 0,
     review: "",
     attachedImages: [],
@@ -293,6 +294,7 @@ const TextModal = ({
                   value={textReviewData.review}
                   onChange={handleChange}
                   rows={4}
+                  minLength={20}
                   maxLength={500}
                   placeholder="Write your thoughts here"
                   required

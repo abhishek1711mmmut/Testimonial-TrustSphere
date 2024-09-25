@@ -6,19 +6,12 @@ export type SpaceInfo = {
   questions: string[];
 };
 
-export type TextReview = {
+export type Review = {
   rating: number;
+  reviewerName: string;
+  reviewerEmail: string;
+  reviewerImage: File | null;
   review: string;
   attachedImages: File[];
-  reviewerName: string;
-  reviewerEmail: string;
-  reviewerImage: File | null;
-};
-
-export type VideoReview = {
-  rating: number;
-  reviewerName: string;
-  reviewerEmail: string;
-  reviewerImage: File | null;
   video: File | null;
 };

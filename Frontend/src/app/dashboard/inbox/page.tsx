@@ -1,25 +1,17 @@
+import Inbox from "@/components/Dashboard/Inbox";
 import React from "react";
 
 const InboxPage = () => {
   return (
     <>
-      <div className="rounded-lg border p-7 shadow-solid-3 transition-all dark:border-strokedark dark:bg-blacksection xl:p-12.5">
-        <h1>Welcome to Inbox</h1>
-
-        <p className="text-body-color dark:text-body-color-dark text-base">
-          This document serves as a simple template to showcase a sample layout
-          and format. It is solely created for demonstration purposes and is not
-          intended for any official use.
-        </p>
-        <p className="text-body-color dark:text-body-color-dark text-base">
-          Please visit:{" "}
-          <b>
-            <a href="https://nextjstemplates.com/docs">
-              nextjstemplates.com/docs
-            </a>
-          </b>{" "}
-          to check out the real docs, setup guide and even video instructions
-        </p>
+      <div className="rounded-lg border p-7 shadow-solid-3 transition-all dark:border-strokedark dark:bg-blacksection">
+        <h1 className="mb-4 w-fit border-b border-strokedark pb-1 text-3xl font-bold text-black dark:border-waterloo dark:text-white lg:text-4xl">
+          Inbox
+        </h1>
+        <h2 className="mb-4">
+          Manage your space
+        </h2>
+        <Inbox />
       </div>
     </>
   );
