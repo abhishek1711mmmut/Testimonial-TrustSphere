@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";

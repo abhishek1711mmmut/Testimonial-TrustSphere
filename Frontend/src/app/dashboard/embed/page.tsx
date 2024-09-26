@@ -48,7 +48,7 @@ const EmbedPage = () => {
   ];
 
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const [selectedSpace, setSelectedSpace] = useState<string>("");
+  // const [selectedSpace, setSelectedSpace] = useState<string>("");
   const ref = useRef<HTMLDivElement | null>(null);
   const ref2 = useRef<HTMLButtonElement | null>(null);
 
@@ -106,7 +106,7 @@ const EmbedPage = () => {
                   <li key={id} className="py-2">
                     <button
                       type="button"
-                      onClick={() => setSelectedSpace(space.spaceName)}
+                      // onClick={() => setSelectedSpace(space.spaceName)}
                       className="block w-full rounded-md px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       {space.spaceName}
