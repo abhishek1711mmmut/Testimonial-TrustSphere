@@ -4,11 +4,11 @@ import { toast } from "react-hot-toast";
 
 const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
   // creating a temp clientId and spaceName for testing
-  const clientId = "123456789";
+  const spaceId = 1;
   const spaceName = "StudyNotion";
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText(`http://localhost:3000/collect/${clientId}/${spaceName}`)
+      .writeText(`http://localhost:3000/collect/${spaceId}/${spaceName}`)
       .then(() => {
         toast.success("Copied to clipboard");
       });
@@ -56,7 +56,7 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
                   target="_blank"
                   className="max-w-[90%] text-ellipsis overflow-hidden"
                 >
-                  {`http://localhofhffjfjfjfjfjfjfjst:3000/${clientId}/${spaceName}`}
+                  {`http://localhofhffjfjfjfjfjfjfjst:3000/${spaceId}/${spaceName}`}
                 </Link>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

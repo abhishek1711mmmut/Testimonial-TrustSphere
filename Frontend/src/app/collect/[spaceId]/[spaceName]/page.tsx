@@ -3,13 +3,13 @@ import ReviewForm from "@/components/CollectFeedback";
 const TestimonialPage = ({
   params,
 }: {
-  params: { clientId: string; spaceName: string };
+  params: { spaceId: string; spaceName: string };
 }) => {
-  const { clientId, spaceName } = params;
+  const { spaceId, spaceName } = params;
 
   return (
     <div className="pt-20">
-      <ReviewForm clientId={clientId} spaceName={spaceName} />
+      <ReviewForm spaceId={spaceId} spaceName={spaceName} />
     </div>
   );
 };

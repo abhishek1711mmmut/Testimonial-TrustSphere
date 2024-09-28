@@ -7,10 +7,10 @@ import { SpaceInfo } from "@/types/reviewSpace";
 import VideoModal from "./Modal/VideoModal";
 
 const ReviewForm = ({
-  clientId,
+  spaceId,
   spaceName,
 }: {
-  clientId: string;
+  spaceId: string;
   spaceName: string;
 }) => {
   const [openTextModal, setOpenTextModal] = useState(false);
@@ -161,7 +161,7 @@ const ReviewForm = ({
               </div>
             </div>
             <p>
-              {clientId} {spaceName}
+              {spaceId} {spaceName}
             </p>
           </div>
         </div>

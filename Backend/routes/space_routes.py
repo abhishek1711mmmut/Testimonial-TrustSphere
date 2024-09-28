@@ -1,6 +1,6 @@
-from flask import Blueprint, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from services.space_services import create_space_logic, delete_space_logic, edit_space_logic
+from flask import Blueprint
+from flask_jwt_extended import jwt_required
+from services.space_services import create_space_logic, delete_space_logic, edit_space_logic, get_spaces_logic
 
 bp = Blueprint('space', __name__, url_prefix='/space')
 
@@ -26,7 +26,14 @@ def delete_space(space_id):
 @bp.route('/edit/<int:space_id>', methods=['PUT'])
 @jwt_required()  # Only authorized users
 def edit_space(space_id):
-    current_user_id = get_jwt_identity()  # Get the current user ID from JWT
-    space_data = request.get_json()  # Get data from the request body
     # Call the service layer to edit the space
-    return edit_space_logic(space_data, current_user_id)
+    return edit_space_logic(space_id)
+
+
+
+# Route for getting all spaces of a user
+@bp.route('/spaces', methods=['GET'])
+@jwt_required()  # Only authorized users
+def get_spaces():
+    # Call the service layer to get all spaces
+    return get_spaces_logic()

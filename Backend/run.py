@@ -28,9 +28,9 @@ jwt = JWTManager(app)
 from routes import auth_routes as auth, space_routes as space, testimonial_routes as testimonial
 app.register_blueprint(auth.bp)
 app.register_blueprint(space.bp)
-# app.register_blueprint(testimonial.bp)
+app.register_blueprint(testimonial.bp)
 
-# create a simple "/" route that returns "Hello, World!"
+# create a simple "/" route that print welcome message
 @app.route('/')
 def hello_world():
     return 'Welcome to the TrustSphere Backend'
