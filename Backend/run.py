@@ -3,6 +3,7 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from config import database
 from datetime import timedelta
+from utils.mailSender import init_mail
 import os
 
 # Load environment variables
@@ -18,6 +19,15 @@ app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=12)
+# Configure Flask-Mail with your email settings
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+# Initialize Mail
+init_mail(app)
 
 # Initialize the db
 database.init_db(app)

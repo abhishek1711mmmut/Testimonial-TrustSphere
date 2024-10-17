@@ -1,5 +1,4 @@
 from flask_mysqldb import MySQL
-import os
 
 mysql = MySQL()
 
@@ -13,6 +12,9 @@ def create_tables_if_not_exist():
     """Create tables if they don't exist."""
     cursor = mysql.connection.cursor()
     with open('sql/create_plans_table.sql', 'r') as sql_file:
+        sql_script = sql_file.read()
+        cursor.execute(sql_script)
+    with open('sql/create_otp_table.sql', 'r') as sql_file:
         sql_script = sql_file.read()
         cursor.execute(sql_script)
     with open('sql/create_users_table.sql', 'r') as sql_file:
