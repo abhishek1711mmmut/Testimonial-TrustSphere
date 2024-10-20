@@ -14,7 +14,6 @@ const Header = () => {
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
-  const isLoggedIn = true;
 
   const profileDropdownRef = useRef<HTMLDivElement | null>(null);
   const pathUrl = usePathname();

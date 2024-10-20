@@ -1,20 +1,18 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 
-// const AppContext = createContext({
-//   isLoading: false,
-//   setIsLoading: (value: boolean) => {},
-//   token: "",
-//   setToken: (value: string) => {},
-//   user: {},
-//   setUser: (value: any) => {},
-//   signupData: {},
-//   setSignupData: (value: any) => {},
-//   isAuth: false,
-//   setIsAuth: (value: boolean) => {},
-// });
-
-const AppContext = createContext<any>({});
+const AppContext = createContext({
+  isLoading: false,
+  setIsLoading: (value: boolean) => {},
+  token: "",
+  setToken: (value: string) => {},
+  user: {},
+  setUser: (value: any) => {},
+  signupData: {},
+  setSignupData: (value: any) => {},
+  isAuth: false,
+  setIsAuth: (value: boolean) => {},
+});
 
 export const AppContextProvider = ({
   children,

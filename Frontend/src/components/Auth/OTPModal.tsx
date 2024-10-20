@@ -40,7 +40,6 @@ const OtpModal: React.FC<OtpModalProps> = ({ isOpen, onClose }) => {
 
   const handlePaste = (
     e: React.ClipboardEvent<HTMLInputElement>,
-    index: number,
   ) => {
     const pastedData = e.clipboardData.getData("text");
     if (/^\d{6}$/.test(pastedData)) {
@@ -81,7 +80,7 @@ const OtpModal: React.FC<OtpModalProps> = ({ isOpen, onClose }) => {
                   handleBackspace(index);
                 }
               }}
-              onPaste={(e) => handlePaste(e, index)}
+              onPaste={(e) => handlePaste(e)}
               ref={(el) => {
                 if (inputRefs.current[index] === null) {
                   inputRefs.current[index] = el;
