@@ -1,18 +1,33 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 
-const AppContext = createContext({
-  isLoading: false,
-  setIsLoading: (value: boolean) => {},
-  token: "",
-  setToken: (value: string) => {},
-  user: {},
-  setUser: (value: any) => {},
-  signupData: {},
-  setSignupData: (value: any) => {},
-  isAuth: false,
-  setIsAuth: (value: boolean) => {},
-});
+type Context={
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
+  token: string;
+  setToken: (value: string) => void;
+  user: any;
+  setUser: (value: any) => void;
+  signupData: any;
+  setSignupData: (value: any) => void;
+  isAuth: boolean;
+  setIsAuth: (value: boolean) => void;
+}
+
+const AppContext = createContext<Context>({} as Context);
+
+// const AppContext = createContext({
+//   isLoading: false,
+//   setIsLoading: (value: boolean) => {},
+//   token: "",
+//   setToken: (value: string) => {},
+//   user: {},
+//   setUser: (value: any) => {},
+//   signupData: {},
+//   setSignupData: (value: any) => {},
+//   isAuth: false,
+//   setIsAuth: (value: boolean) => {},
+// });
 
 export const AppContextProvider = ({
   children,
