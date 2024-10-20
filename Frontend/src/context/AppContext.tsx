@@ -6,10 +6,10 @@ type Context={
   setIsLoading: (value: boolean) => void;
   token: string;
   setToken: (value: string) => void;
-  user: any;
-  setUser: (value: any) => void;
-  signupData: any;
-  setSignupData: (value: any) => void;
+//   user: any;
+//   setUser: (value: any) => void;
+//   signupData: any;
+//   setSignupData: (value: any) => void;
   isAuth: boolean;
   setIsAuth: (value: boolean) => void;
 }
@@ -36,8 +36,8 @@ export const AppContextProvider = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
-  const [user, setUser] = useState<any>({});
-  const [signupData, setSignupData] = useState<any>({});
+//   const [user, setUser] = useState<any>({});
+//   const [signupData, setSignupData] = useState<any>({});
   const [isAuth, setIsAuth] = useState(false);
 
   const value = {
@@ -45,10 +45,10 @@ export const AppContextProvider = ({
     setIsLoading,
     token,
     setToken,
-    user,
-    setUser,
-    signupData,
-    setSignupData,
+    // user,
+    // setUser,
+    // signupData,
+    // setSignupData,
     isAuth,
     setIsAuth,
   };
