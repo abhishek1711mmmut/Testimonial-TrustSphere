@@ -7,12 +7,14 @@ import Header from "@/components/Header";
 import ToasterContext from "@/context/ToastContext";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import { AppContextProvider } from "@/context/AppContext";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "TrustSphere",
-  description: "Discover and share authentic reviews effortlessly with TrustSphere. Our modern platform connects you with genuine feedback and testimonials, helping you make informed decisions and build trust. Join the conversation and see what others are saying today!",
+  description:
+    "Discover and share authentic reviews effortlessly with TrustSphere. Our modern platform connects you with genuine feedback and testimonials, helping you make informed decisions and build trust. Join the conversation and see what others are saying today!",
 };
 
 export default function RootLayout({
@@ -29,9 +31,11 @@ export default function RootLayout({
           // defaultTheme="light"
         >
           <Lines />
-          <Header />
           <ToasterContext />
-          {children}
+          <AppContextProvider>
+            <Header />
+            {children}
+          </AppContextProvider>
           <Footer />
           <ScrollToTop />
         </ThemeProvider>

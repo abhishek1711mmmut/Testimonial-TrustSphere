@@ -77,12 +77,6 @@ const profileMenuData: Menu[] = [
     newTab: false,
     path: "/dashboard/settings",
   },
-  {
-    id: 3,
-    title: "Sign out",
-    newTab: false,
-    path: "/logout",
-  },
 ];
 
 export { menuData, profileMenuData };

@@ -7,8 +7,10 @@ import { useState, useRef } from "react";
 import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
+import { useAppContext } from "@/context/AppContext";
 
 const Header = () => {
+  const { isAuth, setIsAuth } = useAppContext();
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
@@ -157,7 +159,7 @@ const Header = () => {
               <div className="mt-7 flex items-center gap-6 lg:mt-0">
                 <ThemeToggler />
 
-                {isLoggedIn ? (
+                {isAuth ? (
                   <div className="relative" ref={profileDropdownRef}>
                     <button
                       onClick={toggleProfileDropdown}
@@ -198,6 +200,17 @@ const Header = () => {
                             </Link>
                           </li>
                         ))}
+                        <li className="px-4 py-1 hover:text-primary">
+                          <Link
+                            href="/"
+                            onClick={()=>{
+                              setIsAuth(false);
+                              toggleProfileDropdown();
+                            }}
+                          >
+                            Sign Out
+                          </Link>
+                        </li>
                       </ul>
                     )}
                   </div>
