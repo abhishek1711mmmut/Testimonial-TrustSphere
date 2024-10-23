@@ -1,11 +1,10 @@
 import apiClient from "@/utils/apiClient";
 import { SignupData } from "@/types/signupData";
 import toast from "react-hot-toast";
-import { useAppContext } from "@/context/AppContext";
 
 export const signUp = async (data: SignupData) => {
-  const { setLoading } = useAppContext();
-  setLoading(true);
+  // const { setLoading } = useAppContext();
+  // setLoading(true);
   try {
     const response = await apiClient.post("/auth/signup", data);
     // return response.data;
@@ -16,5 +15,5 @@ export const signUp = async (data: SignupData) => {
     console.log("SIGNUP API ERROR............", error);
     toast.error("Error creating user");
   }
-  setLoading(false);
+  // setLoading(false);
 };
