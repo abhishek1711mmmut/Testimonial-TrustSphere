@@ -3,7 +3,7 @@ import { SignupData } from "@/types/signupData";
 import toast from "react-hot-toast";
 import { useAppContext } from "@/context/AppContext";
 
-export const signup = async (data: SignupData) => {
+export const signUp = async (data: SignupData) => {
   const { setLoading } = useAppContext();
   setLoading(true);
   try {
