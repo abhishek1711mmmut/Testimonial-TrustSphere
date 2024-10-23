@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from services.space_services import create_space_logic, delete_space_logic, edit_space_logic, get_spaces_logic
 
-bp = Blueprint('space', __name__, url_prefix='/space')
+bp = Blueprint('space', __name__, url_prefix='/api/space')
 
 # Route for creating a space, accessible only by authorized users
 @bp.route('/create', methods=['POST'])

@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from services.testimonial_services import create_testimonial_logic, get_all_testimonials_by_spaceId_logic, delete_testimonial_logic
 
-bp = Blueprint('testimonial', __name__, url_prefix='/testimonial')
+bp = Blueprint('testimonial', __name__, url_prefix='/api/testimonial')
 
 @bp.route('/create', methods=['POST'])
 def create_testimonial():

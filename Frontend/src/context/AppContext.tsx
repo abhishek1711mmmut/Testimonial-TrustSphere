@@ -2,8 +2,8 @@
 import { createContext, useContext, useState } from "react";
 
 type Context={
-  isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
+  loading: boolean;
+  setLoading: (value: boolean) => void;
   token: string;
   setToken: (value: string) => void;
 //   user: any;
@@ -34,15 +34,14 @@ export const AppContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [token, setToken] = useState("");
 //   const [user, setUser] = useState<any>({});
-//   const [signupData, setSignupData] = useState<any>({});
   const [isAuth, setIsAuth] = useState(false);
 
   const value = {
-    isLoading,
-    setIsLoading,
+    loading,
+    setLoading,
     token,
     setToken,
     // user,
