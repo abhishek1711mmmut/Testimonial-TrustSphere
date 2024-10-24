@@ -2,6 +2,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { SignupData } from "@/types/signupData";
+import { sendOtp, signUp } from "@/api/auth";
 
 interface OtpModalProps {
   isOpen: boolean;
@@ -57,7 +58,11 @@ const OtpModal: React.FC<OtpModalProps> = ({ isOpen, onClose, data }) => {
     onClose();
   };
 
-  const handleSubmit = () => {
+  const resendOtp = async () => {
+    await sendOtp(data.email);
+  };
+
+  const handleSubmit = async () => {
     if (otp.join("").length !== 6) {
       toast.error("Please enter OTP");
       return;
@@ -67,10 +72,12 @@ const OtpModal: React.FC<OtpModalProps> = ({ isOpen, onClose, data }) => {
       ...data,
       otp: textOtp,
     };
-    console.log(signupData);
-    setOtp(Array(6).fill(""));
-    onClose();
-    router.push("/auth/signin");
+    const res = await signUp(signupData);
+    if (res?.success) {
+      setOtp(Array(6).fill(""));
+      onClose();
+      router.push("/auth/signin");
+    }
   };
 
   return (
@@ -122,7 +129,10 @@ const OtpModal: React.FC<OtpModalProps> = ({ isOpen, onClose, data }) => {
           Cancel
         </button>
         <p className="mt-2">
-          <span className="text-primary">Click here</span> to resend the OTP
+          <span className="text-primary cursor-pointer" onClick={resendOtp}>
+            Click here
+          </span>{" "}
+          to resend the OTP
         </p>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaArrowRight } from "react-icons/fa6";
 import OtpModal from "@/components/Auth/OTPModal";
-import { sendOtp } from "@/api/auth/sendOtp";
+import { sendOtp } from "@/api/auth";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);

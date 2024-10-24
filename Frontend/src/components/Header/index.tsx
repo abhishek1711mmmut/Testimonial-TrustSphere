@@ -2,15 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useAppContext } from "@/context/AppContext";
+import toast from "react-hot-toast";
+import { getUser } from "@/api/auth";
 
 const Header = () => {
-  const { isAuth, setIsAuth } = useAppContext();
+  const { isAuth, setIsAuth, setToken } = useAppContext();
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
@@ -27,6 +29,26 @@ const Header = () => {
 
   // Close profile dropdown menu when clicking outside
   useOnClickOutside(profileDropdownRef, null, () => setProfileDropdown(false));
+
+  const handleLogout = () => {
+    setToken(null);
+    setIsAuth(false);
+    localStorage.removeItem("token");
+    toast.success("Logged out");
+  };
+
+  useEffect(() => {
+    if(localStorage.getItem("token")){
+      setIsAuth(true);
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuth) {
+      getUser();
+    } 
+  }, [isAuth]);
 
   return (
     <>
@@ -202,8 +224,8 @@ const Header = () => {
                         <li className="px-4 py-1 hover:text-primary">
                           <Link
                             href="/"
-                            onClick={()=>{
-                              setIsAuth(false);
+                            onClick={() => {
+                              handleLogout();
                               toggleProfileDropdown();
                             }}
                           >

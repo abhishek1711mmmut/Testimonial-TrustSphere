@@ -1,53 +1,35 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 
-type Context={
-  loading: boolean;
-  setLoading: (value: boolean) => void;
-  token: string;
-  setToken: (value: string) => void;
-//   user: any;
-//   setUser: (value: any) => void;
-//   signupData: any;
-//   setSignupData: (value: any) => void;
+type Context = {
+  //   user: any;
+  //   setUser: (value: any) => void;
+  //   signupData: any;
+  //   setSignupData: (value: any) => void;
+  token: string | null;
+  setToken: (value: string | null) => void;
   isAuth: boolean;
   setIsAuth: (value: boolean) => void;
-}
+};
 
 const AppContext = createContext<Context>({} as Context);
-
-// const AppContext = createContext({
-//   isLoading: false,
-//   setIsLoading: (value: boolean) => {},
-//   token: "",
-//   setToken: (value: string) => {},
-//   user: {},
-//   setUser: (value: any) => {},
-//   signupData: {},
-//   setSignupData: (value: any) => {},
-//   isAuth: false,
-//   setIsAuth: (value: boolean) => {},
-// });
 
 export const AppContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState("");
-//   const [user, setUser] = useState<any>({});
-  const [isAuth, setIsAuth] = useState(false);
+  //   const [user, setUser] = useState<any>({});
+  const [token, setToken] = useState<string | null>(null);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   const value = {
-    loading,
-    setLoading,
-    token,
-    setToken,
     // user,
     // setUser,
     // signupData,
     // setSignupData,
+    token,
+    setToken,
     isAuth,
     setIsAuth,
   };

@@ -5,3 +5,8 @@ export type SignupData = {
   password: string;
   otp:string
 };
+
+export type SigninData = {
+  email: string;
+  password: string;
+};

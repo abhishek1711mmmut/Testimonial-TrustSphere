@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity
 from config.database import mysql
 from utils.email_templates import otp_email_body
 from utils.mailSender import send_email
@@ -122,5 +122,18 @@ def verify_otp_logic(email, otp):
         return {
             "success": False,
             "message": "Unable to verify OTP",
+            "error": str(e)
+        }, 500
+    
+
+def get_user_logic():
+    try:
+        user = get_jwt_identity()
+        print(user)
+        return jsonify({"success": True, "message": "User retrieved successfully", "data": jsonify({"user": user})}), 200
+    except Exception as e:
+        return {
+            "success": False,
+            "message": "Unable to retrieve user",
             "error": str(e)
         }, 500

@@ -1,4 +1,5 @@
 "use client";
+import { login } from "@/api/auth";
 import { useAppContext } from "@/context/AppContext";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -7,18 +8,22 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Signin = () => {
-  const { setIsAuth } = useAppContext();
-  const router=useRouter();
+  const { setIsAuth, setToken } = useAppContext();
+  const router = useRouter();
 
   const [data, setData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSubmit = () => {
-    console.log(data);
-    setIsAuth(true);
-    router.push("/dashboard/overview");
+  const handleSubmit = async () => {
+    const res = await login(data);
+    if (res?.success) {
+      setToken(res.access_token);
+      setIsAuth(true);
+      localStorage.setItem("token", res.access_token);
+      router.push("/dashboard/overview");
+    }
   };
 
   return (
@@ -132,11 +137,13 @@ const Signin = () => {
               <span className="dark:bg-stroke-dark hidden h-[1px] w-full max-w-[200px] bg-stroke dark:bg-strokedark sm:block"></span>
             </div>
 
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-              return false;
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+                return false;
+              }}
+            >
               <div className="mb-7.5 flex flex-col gap-7.5 lg:mb-12.5 lg:flex-row lg:justify-between lg:gap-14">
                 <input
                   type="text"
