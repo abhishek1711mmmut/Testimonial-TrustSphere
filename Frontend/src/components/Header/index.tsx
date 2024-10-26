@@ -184,7 +184,7 @@ const Header = () => {
                       className="group flex cursor-pointer items-center justify-between gap-3 hover:text-primary"
                     >
                       <Image
-                        src="/images/user/user-02.png"
+                        src={`https://ui-avatars.com/api/?name=${userId}&background=random&length=1&size=100`}
                         alt="user"
                         width={40}
                         height={40}
