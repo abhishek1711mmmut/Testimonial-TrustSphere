@@ -22,7 +22,9 @@ app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
 app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=12)
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token"
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=3)
 app.config['CORS_HEADERS'] = 'Content-Type'
 # Configure Flask-Mail with your email settings
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')

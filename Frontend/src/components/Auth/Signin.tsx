@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Signin = () => {
-  const { setIsAuth, setToken } = useAppContext();
+  const { setIsAuth, setUserId } = useAppContext();
   const router = useRouter();
 
   const [data, setData] = useState({
@@ -18,10 +18,12 @@ const Signin = () => {
 
   const handleSubmit = async () => {
     const res = await login(data);
+
     if (res?.success) {
-      setToken(res.access_token);
       setIsAuth(true);
-      localStorage.setItem("token", res.access_token);
+      const userId = data.email.split("@")[0];
+      setUserId(userId);
+      localStorage.setItem("userId", userId);
       router.push("/dashboard/overview");
     }
   };

@@ -2,14 +2,10 @@
 import { createContext, useContext, useState } from "react";
 
 type Context = {
-  //   user: any;
-  //   setUser: (value: any) => void;
-  //   signupData: any;
-  //   setSignupData: (value: any) => void;
-  token: string | null;
-  setToken: (value: string | null) => void;
   isAuth: boolean;
   setIsAuth: (value: boolean) => void;
+  userId: string | null;
+  setUserId: (value: string | null) => void;
 };
 
 const AppContext = createContext<Context>({} as Context);
@@ -19,19 +15,14 @@ export const AppContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  //   const [user, setUser] = useState<any>({});
-  const [token, setToken] = useState<string | null>(null);
   const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const value = {
-    // user,
-    // setUser,
-    // signupData,
-    // setSignupData,
-    token,
-    setToken,
     isAuth,
     setIsAuth,
+    userId,
+    setUserId,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

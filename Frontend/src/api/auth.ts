@@ -77,6 +77,30 @@ export const login = async (data: SigninData) => {
   return result;
 };
 
+export const logout = async () => {
+  const toastId = toast.loading("Loading...", {
+    position: "top-center",
+  });
+  let result = null;
+  try {
+    const response = await apiClient.get("/api/auth/logout");
+    console.log("LOGOUT API RESPONSE............", response);
+    if (!response?.data?.success) {
+      throw new Error(response.data.message);
+    }
+    result = response?.data;
+    toast.success("Logged out");
+  } catch (error) {
+    console.log("LOGOUT API ERROR............", error);
+    if (axios.isAxiosError(error)) {
+      toast.error(error.response?.data?.message);
+    } else {
+      toast.error("Error logging out");
+    }
+  }
+  toast.dismiss(toastId);
+  return result;
+};
 
 export const getUser = async () => {
   const toastId = toast.loading("Loading...", {

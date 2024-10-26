@@ -1,8 +1,9 @@
-from flask import jsonify, request
+from flask import jsonify, request, make_response
 from flask_jwt_extended import create_access_token, get_jwt_identity
 from config.database import mysql
 from utils.email_templates import otp_email_body
 from utils.mailSender import send_email
+from datetime import datetime, timedelta
 import random
 import bcrypt
 
@@ -65,8 +66,12 @@ def login_logic():
         if not user or not check_password:
             return jsonify({"message": "Invalid credentials", "success": "false"}), 401     
         # Create JWT token
-        access_token = create_access_token(identity=user[0])     
-        return jsonify({"access_token": access_token, "success": "true", "message": "Login successful"}), 200
+        access_token = create_access_token(identity=user[0])
+        expire = datetime.now() + timedelta(days=3)
+        # return jsonify({"access_token": access_token, "success": "true", "message": "Login successful"}), 200
+        response = make_response(jsonify({"success": "true", "message": "Login successful"}), 200)
+        response.set_cookie('access_token', access_token, httponly=True, expires=expire)
+        return response
     except Exception as e:
         return jsonify({"message": "Unable to login", "success": "false", "error": str(e)}), 500    
     
@@ -126,11 +131,23 @@ def verify_otp_logic(email, otp):
         }, 500
     
 
+def logout_logic():
+    try:
+        response = make_response(jsonify({"message": "Logged out successfully", "success": True}), 200)
+        response.set_cookie('access_token', '', max_age=0, httponly=True)
+        return response
+    except Exception as e:
+        return {
+            "success": False,
+            "message": "Unable to logout",
+            "error": str(e)
+        }, 500
+
 def get_user_logic():
     try:
         user = get_jwt_identity()
-        print(user)
-        return jsonify({"success": True, "message": "User retrieved successfully", "data": jsonify({"user": user})}), 200
+        print("User is ..",user)
+        return jsonify({"success": True, "message": "User retrieved successfully"}), 200
     except Exception as e:
         return {
             "success": False,

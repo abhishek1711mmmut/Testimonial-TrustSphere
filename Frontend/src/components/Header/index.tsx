@@ -8,11 +8,10 @@ import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";
 import useOnClickOutside from "@/hooks/useOnClickOutside";
 import { useAppContext } from "@/context/AppContext";
-import toast from "react-hot-toast";
-import { getUser } from "@/api/auth";
+import { logout } from "@/api/auth";
 
 const Header = () => {
-  const { isAuth, setIsAuth, setToken } = useAppContext();
+  const { isAuth, setIsAuth, userId, setUserId } = useAppContext();
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
@@ -30,25 +29,23 @@ const Header = () => {
   // Close profile dropdown menu when clicking outside
   useOnClickOutside(profileDropdownRef, null, () => setProfileDropdown(false));
 
-  const handleLogout = () => {
-    setToken(null);
+  const handleLogout = async () => {
+    await logout();
     setIsAuth(false);
-    localStorage.removeItem("token");
-    toast.success("Logged out");
+    setUserId(null);
+    localStorage.removeItem("userId");
   };
 
   useEffect(() => {
-    if(localStorage.getItem("token")){
+    if (localStorage.getItem("userId")) {
       setIsAuth(true);
-      setToken(localStorage.getItem("token"));
+      setUserId(localStorage.getItem("userId"));
+    } else {
+      setIsAuth(false);
+      setUserId(null);
+      localStorage.removeItem("userId");
     }
   }, []);
-
-  useEffect(() => {
-    if (isAuth) {
-      getUser();
-    } 
-  }, [isAuth]);
 
   return (
     <>
@@ -193,8 +190,7 @@ const Header = () => {
                         height={40}
                         className="rounded-full"
                       />
-                      {/* {user?.name} */}
-                      Username
+                      Hi, {userId}
                       <span className="text-meta">
                         <svg
                           className="h-3 w-3 cursor-pointer fill-waterloo group-hover:fill-primary"
