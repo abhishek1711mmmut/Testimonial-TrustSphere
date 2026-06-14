@@ -148,11 +148,10 @@ const Signin = () => {
             >
               <div className="mb-7.5 flex flex-col gap-7.5 lg:mb-12.5 lg:flex-row lg:justify-between lg:gap-14">
                 <input
-                  type="text"
+                  type="email"
                   placeholder="Email"
                   name="email"
                   value={data.email}
-                  pattern="^[a-zA-Z0-9]+@gmail\.com$"
                   onChange={(e) => setData({ ...data, email: e.target.value })}
                   className="w-full border-b border-stroke !bg-white pb-3.5 focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white lg:w-1/2"
                 />
