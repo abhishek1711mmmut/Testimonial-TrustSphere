@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Enable CORS
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000"]}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
 
 # Configure app
 app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')

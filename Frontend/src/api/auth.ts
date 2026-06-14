@@ -34,10 +34,7 @@ export const sendOtp = async (email: string) => {
   });
   let result = null;
   try {
-    const response = await apiClient.post(
-      `${process.env.NEXT_PUBLIC_FLASK_API_URL}/api/auth/send-otp`,
-      { email },
-    );
+    const response = await apiClient.post("/api/auth/send-otp", { email });
     console.log("SEND OTP API RESPONSE........", response);
     if (!response?.data?.success) {
       throw new Error(response.data.message);
