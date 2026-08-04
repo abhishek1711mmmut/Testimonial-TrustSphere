@@ -144,3 +144,24 @@ def get_space_by_id_logic(space_id):
         return jsonify({"space": space, "success": "true"}), 200
     except Exception as e:
         return jsonify({"message": "Unable to get space", "success": "false", "error": str(e)}), 500
+
+
+def get_public_space_logic(space_id):
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT id, spaceName, companyLogo, headerTitle, customMessage, questions FROM spaces WHERE id = %s", (space_id,))
+        row = cursor.fetchone()
+        cursor.close()
+        if not row:
+            return jsonify({"message": "Space not found", "success": "false"}), 404
+        space = {
+            "id": row[0],
+            "spaceName": row[1],
+            "companyLogo": row[2],
+            "headerTitle": row[3],
+            "customMessage": row[4],
+            "questions": row[5].split(",") if row[5] else [],
+        }
+        return jsonify({"data": space, "success": "true"}), 200
+    except Exception as e:
+        return jsonify({"message": "Unable to get space", "success": "false", "error": str(e)}), 500

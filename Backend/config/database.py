@@ -27,4 +27,18 @@ def create_tables_if_not_exist():
         sql_script = sql_file.read()
         cursor.execute(sql_script)
     mysql.connection.commit()
+    seed_plans(cursor)
     cursor.close()
+
+
+def seed_plans(cursor):
+    """Seed default plans if the table is empty."""
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT COUNT(*) FROM plans")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        cursor.execute("""
+            INSERT INTO plans (name, max_spaces, max_text_reviews_per_space, max_video_reviews_per_space)
+            VALUES ('Free', 10, 10, 5), ('Premium', NULL, NULL, NULL)
+        """)
+        mysql.connection.commit()

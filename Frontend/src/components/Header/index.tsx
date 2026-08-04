@@ -188,6 +188,7 @@ const Header = () => {
                         alt="user"
                         width={40}
                         height={40}
+                        unoptimized
                         className="rounded-full"
                       />
                       Hi, {userId}

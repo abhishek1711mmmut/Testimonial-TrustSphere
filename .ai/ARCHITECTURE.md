@@ -6,8 +6,8 @@ TrustSphere is a testimonial collection platform with a decoupled frontend/backe
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      Client Browser                      │
-│                                                          │
+│                      Client Browser                     │
+│                                                         │
 │  ┌─────────────────────┐    ┌─────────────────────────┐ │
 │  │   Landing Pages      │    │   Dashboard (Protected) │ │
 │  │   /                  │    │   /dashboard/overview    │ │
@@ -22,7 +22,7 @@ TrustSphere is a testimonial collection platform with a decoupled frontend/backe
                      │ JWT in httpOnly cookie
                      ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Flask Backend (port 5000)                    │
+│              Flask Backend (port 5000)                  │
 │                                                          │
 │  ┌──────────┐   ┌──────────┐   ┌──────────────────────┐ │
 │  │ Blueprint │   │ Blueprint│   │ Blueprint            │ │

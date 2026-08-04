@@ -145,12 +145,37 @@ def logout_logic():
 
 def get_user_logic():
     try:
-        user = get_jwt_identity()
-        print("User is ..",user)
-        return jsonify({"success": True, "message": "User retrieved successfully"}), 200
+        user_id = get_jwt_identity()
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT u.id, u.firstName, u.lastName, u.email, p.name AS plan_name,
+                   p.max_spaces, p.max_text_reviews_per_space, p.max_video_reviews_per_space
+            FROM users u
+            LEFT JOIN plans p ON u.plan_id = p.id
+            WHERE u.id = %s
+        """, (user_id,))
+        row = cursor.fetchone()
+        if not row:
+            cursor.close()
+            return jsonify({"success": False, "message": "User not found"}), 404
+        cursor.execute("SELECT COUNT(*) FROM spaces WHERE user_id = %s", (user_id,))
+        space_count = cursor.fetchone()[0]
+        cursor.close()
+        user_data = {
+            "id": row[0],
+            "firstName": row[1],
+            "lastName": row[2],
+            "email": row[3],
+            "planName": row[4] or "Free",
+            "maxSpaces": row[5],
+            "maxTextReviews": row[6],
+            "maxVideoReviews": row[7],
+            "spaceCount": space_count,
+        }
+        return jsonify({"success": True, "data": user_data, "message": "User retrieved successfully"}), 200
     except Exception as e:
-        return {
+        return jsonify({
             "success": False,
             "message": "Unable to retrieve user",
             "error": str(e)
-        }, 500
+        }), 500

@@ -101,7 +101,7 @@ def get_all_testimonials_by_spaceId_logic(space_id):
         testimonials=[]
         for row in results:
             testimonial={
-                 "id": row[0],
+                "id": row[0],
                 "rating": row[1],
                 "reviewer_name": row[2],
                 "reviewer_email": row[3],
@@ -135,10 +135,19 @@ def delete_testimonial_logic(testimonial_id, space_id):
         return jsonify({"message": "Testimonial ID is required", "success": "false"}), 400
     try:
         cursor = mysql.connection.cursor()
+        cursor.execute("SELECT type FROM testimonials WHERE id = %s", (testimonial_id,))
+        testimonial = cursor.fetchone()
+        if not testimonial:
+            cursor.close()
+            return jsonify({"message": "Testimonial not found", "success": "false"}), 404
+        testimonial_type = testimonial[0]
         cursor.execute("DELETE FROM testimonials WHERE id = %s", (testimonial_id,))
+        if testimonial_type == "text":
+            cursor.execute("UPDATE spaces SET text_review_count = GREATEST(text_review_count - 1, 0) WHERE id = %s", (space_id,))
+        elif testimonial_type == "video":
+            cursor.execute("UPDATE spaces SET video_review_count = GREATEST(video_review_count - 1, 0) WHERE id = %s", (space_id,))
         mysql.connection.commit()
         cursor.close()
-        # return the updated testimonials list
         return get_all_testimonials_by_spaceId_logic(space_id)
     except Exception as e:
         return jsonify({"error": str(e), "success": "false", "message": "Unable to delete testimonial"}), 500

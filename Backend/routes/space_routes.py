@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
-from services.space_services import create_space_logic, delete_space_logic, edit_space_logic, get_spaces_logic
+from services.space_services import create_space_logic, delete_space_logic, edit_space_logic, get_spaces_logic, get_public_space_logic
 
 bp = Blueprint('space', __name__, url_prefix='/api/space')
 
@@ -37,3 +37,8 @@ def edit_space(space_id):
 def get_spaces():
     # Call the service layer to get all spaces
     return get_spaces_logic()
+
+
+@bp.route('/public/<int:space_id>', methods=['GET'])
+def get_public_space(space_id):
+    return get_public_space_logic(space_id)
