@@ -3,13 +3,15 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SpaceInfo } from "@/types/reviewSpace";
+import { createSpace } from "@/api/spaces";
 
 type ModalProps = {
-  onSubmit: () => void;
+  onSubmit: (spaceData: { id: number; name: string }) => void;
   onClose: () => void;
 };
 
 const Modal = ({ onSubmit, onClose }: ModalProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [spaceInfo, setSpaceInfo] = useState<SpaceInfo>({
     spaceName: "",
     companyLogo: null,
@@ -85,12 +87,22 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
     }
   };
 
-  // Handler to submit the space information
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle the customer information here (e.g., send it to a server)
-    console.log(spaceInfo);
-    onSubmit();
+    setIsSubmitting(true);
+    const formData = new FormData();
+    formData.append("spaceName", spaceInfo.spaceName);
+    formData.append("headerTitle", spaceInfo.headerTitle);
+    formData.append("customMessage", spaceInfo.customMessage);
+    spaceInfo.questions.forEach((q) => formData.append("questions", q));
+    if (spaceInfo.companyLogo instanceof File) {
+      formData.append("companyLogo", spaceInfo.companyLogo);
+    }
+    const result = await createSpace(formData);
+    setIsSubmitting(false);
+    if (result) {
+      onSubmit({ id: result.data?.id, name: spaceInfo.spaceName });
+    }
   };
 
   return (
@@ -379,10 +391,11 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
                 </button>
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   aria-label="submit your space form"
-                  className="inline-flex items-center gap-2.5 rounded-full bg-primary px-6 py-3 font-medium text-white duration-300 ease-in-out hover:bg-primaryho dark:bg-primary dark:hover:bg-primaryho"
+                  className="inline-flex items-center gap-2.5 rounded-full bg-primary px-6 py-3 font-medium text-white duration-300 ease-in-out hover:bg-primaryho disabled:opacity-50 dark:bg-primary dark:hover:bg-primaryho"
                 >
-                  Submit
+                  {isSubmitting ? "Creating..." : "Submit"}
                   {/* right arrow icon */}
                   <svg
                     className="fill-white"

@@ -2,16 +2,18 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 
-const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
-  // creating a temp clientId and spaceName for testing
-  const spaceId = 1;
-  const spaceName = "StudyNotion";
+type OnSubmitModalProps = {
+  onClose: () => void;
+  spaceId: number;
+  spaceName: string;
+};
+
+const OnSubmitModal = ({ onClose, spaceId, spaceName }: OnSubmitModalProps) => {
+  const collectUrl = `${window.location.origin}/collect/${spaceId}/${spaceName}`;
   const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(`http://localhost:3000/collect/${spaceId}/${spaceName}`)
-      .then(() => {
-        toast.success("Copied to clipboard");
-      });
+    navigator.clipboard.writeText(collectUrl).then(() => {
+      toast.success("Copied to clipboard");
+    });
   };
 
   return (
@@ -44,7 +46,7 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
               </svg>
             </div>
             <p className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-              {"StudyNotion"} added Successfully
+              {spaceName} added Successfully
             </p>
             <div className="mb-4">
               <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
@@ -52,11 +54,11 @@ const OnSubmitModal = ({ onClose }: { onClose: () => void }) => {
               </p>
               <div className="flex w-full justify-between items-center rounded-md bg-gray-100 p-2 text-left text-sm font-semibold text-primary dark:text-green-400/80 tracking-wide dark:bg-blackho">
                 <Link
-                  href="/dashboard/overview"
+                  href={`/collect/${spaceId}/${spaceName}`}
                   target="_blank"
                   className="max-w-[90%] text-ellipsis overflow-hidden"
                 >
-                  {`http://localhofhffjfjfjfjfjfjfjst:3000/${spaceId}/${spaceName}`}
+                  {collectUrl}
                 </Link>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

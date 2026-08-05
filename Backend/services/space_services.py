@@ -42,8 +42,9 @@ def create_space_logic():
                 VALUES (%s, %s, %s, %s, %s, %s)"""
         cursor.execute(query, (user_id, space_name, company_logo_url, header_title, custom_message, ','.join(questions)))
         mysql.connection.commit()
+        space_id = cursor.lastrowid
         cursor.close()
-        return jsonify({"success": "true", "message": "Space created successfully", }), 201
+        return jsonify({"success": "true", "message": "Space created successfully", "data": {"id": space_id}}), 201
     except Exception as e:
         return jsonify({"message": "Unable to create space", "success": "false", "error": str(e)}), 500
 
