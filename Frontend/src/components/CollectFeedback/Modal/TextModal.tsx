@@ -3,12 +3,15 @@ import Image from "next/image";
 import { useState, useRef, memo, useCallback } from "react";
 import Rating from "./Rating";
 import { motion, AnimatePresence } from "framer-motion";
+import { createTestimonial } from "@/api/testimonials";
 
 const TextModal = ({
   spaceInfo,
+  spaceId,
   onClose,
 }: {
   spaceInfo: SpaceInfo;
+  spaceId: string;
   onClose: () => void;
 }) => {
   // omit video from text review data
@@ -184,11 +187,28 @@ const TextModal = ({
     [setTextReviewData],
   );
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle the customer information here (e.g., send it to a server)
-    console.log(textReviewData);
-    onClose();
+    setIsSubmitting(true);
+    const formData = new FormData();
+    formData.append("spaceId", spaceId);
+    formData.append("rating", textReviewData.rating.toString());
+    formData.append("reviewerName", textReviewData.reviewerName);
+    formData.append("reviewerEmail", textReviewData.reviewerEmail);
+    formData.append("review", textReviewData.review);
+    if (textReviewData.reviewerImage) {
+      formData.append("reviewerImage", textReviewData.reviewerImage);
+    }
+    textReviewData.attachedImages.forEach((image) => {
+      formData.append("attachedImages", image);
+    });
+    const result = await createTestimonial(formData);
+    setIsSubmitting(false);
+    if (result) {
+      onClose();
+    }
   };
 
   return (
@@ -462,9 +482,10 @@ const TextModal = ({
                   </button>
                   <button
                     type="submit"
-                    className="mb-2 me-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                    disabled={isSubmitting}
+                    className="mb-2 me-2 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 dark:focus:ring-blue-800"
                   >
-                    Submit
+                    {isSubmitting ? "Submitting..." : "Submit"}
                   </button>
                 </div>
               </form>

@@ -1,15 +1,28 @@
+import { useState } from "react";
+import { deleteSpace } from "@/api/spaces";
+
 const DeleteSpaceModal = ({
   onClose,
+  spaceId,
   spaceName,
+  onDelete,
 }: {
   onClose: () => void;
+  spaceId: number;
   spaceName: string;
+  onDelete: () => void;
 }) => {
-  const handleDeleteSpace = () => {
-    // Handle the delete space functionality here
-    console.log("Delete space clicked");
-    onClose();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteSpace = async () => {
+    setIsDeleting(true);
+    const result = await deleteSpace(spaceId);
+    setIsDeleting(false);
+    if (result) {
+      onDelete();
+    }
   };
+
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden backdrop-blur dark:bg-black/10 md:inset-0">
       <div className="relative max-h-full w-full max-w-md p-4">
@@ -18,7 +31,6 @@ const DeleteSpaceModal = ({
             type="button"
             onClick={onClose}
             className="absolute end-2.5 top-3 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="popup-modal"
           >
             <svg
               className="h-3 w-3"
@@ -60,9 +72,10 @@ const DeleteSpaceModal = ({
             <button
               type="button"
               onClick={handleDeleteSpace}
-              className="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800"
+              disabled={isDeleting}
+              className="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:opacity-50 dark:focus:ring-red-800"
             >
-              Yes, I&apos;m sure
+              {isDeleting ? "Deleting..." : "Yes, I'm sure"}
             </button>
             <button
               type="button"

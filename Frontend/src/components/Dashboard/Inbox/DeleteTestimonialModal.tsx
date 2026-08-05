@@ -1,29 +1,39 @@
+import { useState } from "react";
+import { deleteTestimonial } from "@/api/testimonials";
+
 const DeleteTestimonialModal = ({
   onClose,
-  name,
+  testimonialId,
+  spaceId,
+  onDelete,
 }: {
   onClose: () => void;
-  name: string;
+  testimonialId: number;
+  spaceId: number;
+  onDelete: () => void;
 }) => {
-  const handleDeleteTestimonial = () => {
-    // Handle the delete testimonial functionality here
-    console.log("Delete testimonial clicked");
-    onClose();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteTestimonial = async () => {
+    setIsDeleting(true);
+    const result = await deleteTestimonial(testimonialId, spaceId);
+    setIsDeleting(false);
+    if (result) {
+      onDelete();
+    }
   };
-  console.log(name);
+
   return (
     <div
       id="deleteModal"
       aria-hidden="true"
       className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden backdrop-blur-sm dark:bg-black/10 md:h-full"
     >
-      {/* <!-- Modal content --> */}
       <div className="relative rounded-lg border border-stroke bg-white p-4 text-center shadow dark:border-strokedark dark:bg-gray-800 sm:p-5">
         <button
           type="button"
           onClick={onClose}
           className="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-toggle="deleteModal"
         >
           <svg
             aria-hidden="true"
@@ -58,7 +68,6 @@ const DeleteTestimonialModal = ({
         </p>
         <div className="flex items-center justify-center space-x-4">
           <button
-            data-modal-toggle="deleteModal"
             type="button"
             onClick={onClose}
             className="focus:ring-primary-300 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600"
@@ -66,11 +75,12 @@ const DeleteTestimonialModal = ({
             No, cancel
           </button>
           <button
-            type="submit"
+            type="button"
             onClick={handleDeleteTestimonial}
-            className="rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+            disabled={isDeleting}
+            className="rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 disabled:opacity-50 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
           >
-            Yes, I&apos;m sure
+            {isDeleting ? "Deleting..." : "Yes, I'm sure"}
           </button>
         </div>
       </div>

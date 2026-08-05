@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
 import ThemeToggler from "../Header/ThemeToggler";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextModal from "./Modal/TextModal";
 import { SpaceInfo } from "@/types/reviewSpace";
 import VideoModal from "./Modal/VideoModal";
+import { getPublicSpace } from "@/api/spaces";
 
 const ReviewForm = ({
   spaceId,
@@ -15,19 +16,33 @@ const ReviewForm = ({
 }) => {
   const [openTextModal, setOpenTextModal] = useState(false);
   const [openVideoModal, setOpenVideoModal] = useState(false);
+  const [spaceInfo, setSpaceInfo] = useState<SpaceInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // create a temp spaceInfo object for testing
-  const spaceInfo: SpaceInfo = {
-    spaceName: "StudyNotion",
-    companyLogo: "/images/logo/logo-dark.svg",
-    headerTitle: "Join us",
-    customMessage: "You will learn a lot",
-    questions: [
-      "Who are you / what are you working on?",
-      "How has [our product / service] helped you?",
-      "What is the best thing about [our product / service]",
-    ],
-  };
+  useEffect(() => {
+    const fetchSpace = async () => {
+      const res = await getPublicSpace(Number(spaceId));
+      if (res?.data) {
+        setSpaceInfo({
+          spaceName: res.data.spaceName,
+          companyLogo: res.data.companyLogo,
+          headerTitle: res.data.headerTitle,
+          customMessage: res.data.customMessage,
+          questions: res.data.questions,
+        });
+      }
+      setIsLoading(false);
+    };
+    fetchSpace();
+  }, [spaceId]);
+
+  if (isLoading) {
+    return <p className="pt-20 text-center text-base">Loading...</p>;
+  }
+
+  if (!spaceInfo) {
+    return <p className="pt-20 text-center text-base">Space not found</p>;
+  }
 
   return (
     <>
@@ -79,6 +94,7 @@ const ReviewForm = ({
                     src={spaceInfo.companyLogo}
                     alt="logo"
                     fill
+                    unoptimized
                     className="mx-auto rounded-full object-contain"
                   />
                 </div>
@@ -126,6 +142,7 @@ const ReviewForm = ({
                 {openVideoModal && (
                   <VideoModal
                     spaceInfo={spaceInfo}
+                    spaceId={spaceId}
                     onClose={() => setOpenVideoModal(false)}
                   />
                 )}
@@ -155,14 +172,12 @@ const ReviewForm = ({
                 {openTextModal && (
                   <TextModal
                     spaceInfo={spaceInfo}
+                    spaceId={spaceId}
                     onClose={() => setOpenTextModal(false)}
                   />
                 )}
               </div>
             </div>
-            <p>
-              {spaceId} {spaceName}
-            </p>
           </div>
         </div>
       </section>
