@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
-from services.testimonial_services import create_testimonial_logic, get_all_testimonials_by_spaceId_logic, delete_testimonial_logic
+from services.testimonial_services import create_testimonial_logic, get_all_testimonials_by_spaceId_logic, delete_testimonial_logic, get_embed_testimonials_logic
 
 bp = Blueprint('testimonial', __name__, url_prefix='/api/testimonial')
 
@@ -15,6 +15,11 @@ def create_testimonial():
 def get_testimonials(space_id):
     return get_all_testimonials_by_spaceId_logic(space_id)
 
+
+
+@bp.route('/embed/<int:space_id>', methods=['GET'])
+def get_embed_testimonials(space_id):
+    return get_embed_testimonials_logic(space_id)
 
 
 @bp.route('/delete/<int:testimonial_id>/<int:space_id>', methods=['DELETE'])

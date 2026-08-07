@@ -9,7 +9,6 @@ import { getPublicSpace } from "@/api/spaces";
 
 const ReviewForm = ({
   spaceId,
-  spaceName,
 }: {
   spaceId: string;
   spaceName: string;

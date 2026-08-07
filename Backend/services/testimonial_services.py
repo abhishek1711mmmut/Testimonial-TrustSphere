@@ -130,6 +130,45 @@ def get_testimonial_by_id_logic(testimonial_id):
         return jsonify({"error": str(e), "success": "false", "message": "Unable to get testimonial by id"}), 500
 
 
+def get_embed_testimonials_logic(space_id):
+    if not space_id:
+        return jsonify({"message": "Space ID is required", "success": "false"}), 400
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT id, spaceName, companyLogo FROM spaces WHERE id = %s", (space_id,))
+        space_row = cursor.fetchone()
+        if not space_row:
+            cursor.close()
+            return jsonify({"message": "Space not found", "success": "false"}), 404
+        space = {
+            "id": space_row[0],
+            "spaceName": space_row[1],
+            "companyLogo": space_row[2],
+        }
+        cursor.execute("SELECT * FROM testimonials WHERE space_id = %s ORDER BY created_at DESC", (space_id,))
+        results = cursor.fetchall()
+        cursor.close()
+        testimonials = []
+        for row in results:
+            testimonial = {
+                "id": row[0],
+                "rating": row[1],
+                "reviewer_name": row[2],
+                "reviewer_email": row[3],
+                "reviewer_image": row[4],
+                "review": row[5],
+                "attached_images": row[6].split(",") if row[6] else [],
+                "video": row[7],
+                "created_at": row[8],
+                "space_id": row[9],
+                "type": row[10]
+            }
+            testimonials.append(testimonial)
+        return jsonify({"data": {"space": space, "testimonials": testimonials}, "success": "true", "message": "Embed data retrieved successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e), "success": "false", "message": "Unable to get embed data"}), 500
+
+
 def delete_testimonial_logic(testimonial_id, space_id):
     if not testimonial_id:
         return jsonify({"message": "Testimonial ID is required", "success": "false"}), 400

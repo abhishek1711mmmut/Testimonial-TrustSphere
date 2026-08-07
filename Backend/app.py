@@ -14,7 +14,10 @@ load_dotenv()
 app = Flask(__name__)
 
 # Enable CORS
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]}}, supports_credentials=True)
+CORS(app, resources={
+    r"/api/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]},
+    r"/embed/*": {"origins": "*"},
+}, supports_credentials=True)
 
 # Configure app
 app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
@@ -45,10 +48,11 @@ jwt = JWTManager(app)
 
 
 # Import routes
-from routes import auth_routes as auth, space_routes as space, testimonial_routes as testimonial
+from routes import auth_routes as auth, space_routes as space, testimonial_routes as testimonial, embed_routes as embed
 app.register_blueprint(auth.bp)
 app.register_blueprint(space.bp)
 app.register_blueprint(testimonial.bp)
+app.register_blueprint(embed.bp)
 
 # create a simple "/" route that print welcome message
 @app.route('/api')
