@@ -6,3 +6,4 @@ Flask-Mail==0.9.1
 Flask-MySQLdb==1.0.1
 cloudinary==1.32.0
 bcrypt==4.0.1
+gunicorn==21.2.0

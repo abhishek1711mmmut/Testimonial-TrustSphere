@@ -71,7 +71,8 @@ def login_logic():
         expire = datetime.now() + timedelta(days=3)
         # return jsonify({"access_token": access_token, "success": "true", "message": "Login successful"}), 200
         response = make_response(jsonify({"success": "true", "message": "Login successful"}), 200)
-        response.set_cookie('access_token', access_token, httponly=True, expires=expire, samesite='Lax', path='/', domain=os.getenv('COOKIE_DOMAIN', 'localhost'))
+        is_prod = os.getenv('FLASK_ENV') == 'production'
+        response.set_cookie('access_token', access_token, httponly=True, expires=expire, samesite='None' if is_prod else 'Lax', secure=is_prod, path='/', domain=os.getenv('COOKIE_DOMAIN', None))
         return response
     except Exception as e:
         return jsonify({"message": "Unable to login", "success": "false", "error": str(e)}), 500    
@@ -135,7 +136,8 @@ def verify_otp_logic(email, otp):
 def logout_logic():
     try:
         response = make_response(jsonify({"message": "Logged out successfully", "success": True}), 200)
-        response.set_cookie('access_token', '', max_age=0, httponly=True, samesite='Lax', path='/', domain=os.getenv('COOKIE_DOMAIN', 'localhost'))
+        is_prod = os.getenv('FLASK_ENV') == 'production'
+        response.set_cookie('access_token', '', max_age=0, httponly=True, samesite='None' if is_prod else 'Lax', secure=is_prod, path='/', domain=os.getenv('COOKIE_DOMAIN', None))
         return response
     except Exception as e:
         return {

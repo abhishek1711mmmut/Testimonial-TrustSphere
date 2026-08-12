@@ -6,6 +6,7 @@ from datetime import timedelta
 from utils.mailSender import init_mail
 from flask_cors import CORS
 import os
+import ssl
 
 # Load environment variables
 load_dotenv()
@@ -14,8 +15,9 @@ load_dotenv()
 app = Flask(__name__)
 
 # Enable CORS
+allowed_origins = os.getenv('CORS_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000').split(',')
 CORS(app, resources={
-    r"/api/*": {"origins": ["http://localhost:3000", "http://127.0.0.1:3000"]},
+    r"/api/*": {"origins": allowed_origins},
     r"/embed/*": {"origins": "*"},
 }, supports_credentials=True)
 
@@ -24,6 +26,13 @@ app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
 app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
+app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT', 3306))
+
+if os.getenv('MYSQL_SSL', 'false').lower() == 'true':
+    app.config['MYSQL_CUSTOM_OPTIONS'] = {
+        'ssl': {'ca': None},
+        'ssl_mode': 'REQUIRED',
+    }
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token"
