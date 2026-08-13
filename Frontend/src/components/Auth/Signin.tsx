@@ -24,6 +24,7 @@ const Signin = () => {
       const userId = data.email.split("@")[0];
       setUserId(userId);
       localStorage.setItem("userId", userId);
+      document.cookie = "ts_auth=1; path=/; max-age=259200";
       router.push("/dashboard/overview");
     }
   };
