@@ -3,9 +3,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const createSpace = async (formData: FormData) => {
-  const toastId = toast.loading("Creating space...", {
-    position: "top-center",
-  });
   let result = null;
   try {
     const response = await apiClient.post("/api/space/create", formData, {
@@ -23,7 +20,6 @@ export const createSpace = async (formData: FormData) => {
       toast.error("Error creating space");
     }
   }
-  toast.dismiss(toastId);
   return result;
 };
 
@@ -64,9 +60,6 @@ export const getPublicSpace = async (spaceId: number) => {
 };
 
 export const editSpace = async (spaceId: number, formData: FormData) => {
-  const toastId = toast.loading("Updating space...", {
-    position: "top-center",
-  });
   let result = null;
   try {
     const response = await apiClient.put(
@@ -86,14 +79,10 @@ export const editSpace = async (spaceId: number, formData: FormData) => {
       toast.error("Error updating space");
     }
   }
-  toast.dismiss(toastId);
   return result;
 };
 
 export const deleteSpace = async (spaceId: number) => {
-  const toastId = toast.loading("Deleting space...", {
-    position: "top-center",
-  });
   let result = null;
   try {
     const response = await apiClient.delete(`/api/space/delete/${spaceId}`);
@@ -109,6 +98,5 @@ export const deleteSpace = async (spaceId: number) => {
       toast.error("Error deleting space");
     }
   }
-  toast.dismiss(toastId);
   return result;
 };

@@ -3,9 +3,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const createTestimonial = async (formData: FormData) => {
-  const toastId = toast.loading("Submitting testimonial...", {
-    position: "top-center",
-  });
   let result = null;
   try {
     const response = await apiClient.post(
@@ -27,7 +24,6 @@ export const createTestimonial = async (formData: FormData) => {
       toast.error("Error submitting testimonial");
     }
   }
-  toast.dismiss(toastId);
   return result;
 };
 
@@ -57,9 +53,6 @@ export const deleteTestimonial = async (
   testimonialId: number,
   spaceId: number,
 ) => {
-  const toastId = toast.loading("Deleting testimonial...", {
-    position: "top-center",
-  });
   let result = null;
   try {
     const response = await apiClient.delete(
@@ -79,6 +72,5 @@ export const deleteTestimonial = async (
       toast.error("Error deleting testimonial");
     }
   }
-  toast.dismiss(toastId);
   return result;
 };

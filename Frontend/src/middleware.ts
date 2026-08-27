@@ -1,13 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/auth/:path*"],
 };
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get("access_token");
-  const hasLocalAuth = request.cookies.get("ts_auth");
-  if (!token && !hasLocalAuth) {
+  const isLoggedIn =
+    request.cookies.has("access_token") || request.cookies.has("ts_auth");
+  const isAuthPage = request.nextUrl.pathname.startsWith("/auth");
+
+  if (isAuthPage && isLoggedIn) {
+    return NextResponse.redirect(new URL("/dashboard/overview", request.url));
+  }
+  if (!isAuthPage && !isLoggedIn) {
     return NextResponse.redirect(new URL("/auth/signin", request.url));
   }
   return NextResponse.next();
