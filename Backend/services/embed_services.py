@@ -35,9 +35,18 @@ body.ts-dark .ts-card { background: #1f2937; border-color: #374151; }
 .ts-stars { display: flex; gap: 2px; }
 .ts-star { width: 16px; height: 16px; color: #facc15; }
 
-.ts-review { font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+.ts-review-wrap { position: relative; margin-bottom: 12px; }
+.ts-review { font-size: 14px; line-height: 1.6; }
+.ts-review.ts-clamped { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 body.ts-light .ts-review { color: #4b5563; }
 body.ts-dark .ts-review { color: #d1d5db; }
+.ts-show-more {
+    background: none; border: none; cursor: pointer; padding: 0;
+    font-size: 13px; font-weight: 600; margin-top: 4px;
+}
+body.ts-light .ts-show-more { color: #3b82f6; }
+body.ts-dark .ts-show-more { color: #60a5fa; }
+.ts-show-more:hover { text-decoration: underline; }
 
 .ts-video { width: 100%; border-radius: 8px; margin-bottom: 12px; }
 
@@ -56,7 +65,7 @@ body.ts-dark .ts-date { color: #6b7280; }
     align-items: flex-start;
 }
 .ts-carousel::-webkit-scrollbar { display: none; }
-.ts-carousel .ts-card { min-width: 300px; flex-shrink: 0; scroll-snap-align: start; margin-bottom: 0; }
+.ts-carousel .ts-card { width: 400px; flex-shrink: 0; scroll-snap-align: start; margin-bottom: 0; }
 .ts-arrow {
     position: absolute; top: 50%; transform: translateY(-50%);
     width: 32px; height: 32px; border-radius: 50%; border: none;
@@ -68,8 +77,15 @@ body.ts-dark .ts-arrow { background: #374151; color: #fff; }
 .ts-arrow-left { left: -4px; }
 .ts-arrow-right { right: -4px; }
 
-/* Grid (masonry) */
-.ts-grid { columns: 300px; column-gap: 16px; }
+/* Grid */
+.ts-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .ts-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .ts-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1400px) { .ts-grid { grid-template-columns: repeat(4, 1fr); } }
+.ts-grid .ts-card { margin-bottom: 0; }
 
 .ts-footer { text-align: center; margin-top: 20px; }
 .ts-footer a { font-size: 12px; text-decoration: none; }
@@ -97,8 +113,14 @@ def _render_card(t):
     # Stars
     stars = f'<div class="ts-stars">{"".join([STAR_SVG] * int(t["rating"]))}</div>'
 
-    # Review text
-    review_html = f'<p class="ts-review">{t["review"]}</p>' if t.get('review') else ''
+    # Review text with show more
+    review_html = ''
+    if t.get('review'):
+        card_id = f'review-{t["id"]}'
+        review_html = f'''<div class="ts-review-wrap">
+        <p class="ts-review ts-clamped" id="{card_id}">{t["review"]}</p>
+        <button class="ts-show-more" data-target="{card_id}" style="display:none;">Show more</button>
+    </div>'''
 
     # Video
     video_html = f'<video class="ts-video" src="{t["video"]}" controls controlslist="nodownload"></video>' if t.get('video') else ''
@@ -172,6 +194,29 @@ def _fetch_space_and_testimonials(space_id, testimonial_id=None):
     return space, testimonials
 
 
+SHOW_MORE_JS = """
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.ts-show-more').forEach(function(btn) {
+        var target = document.getElementById(btn.dataset.target);
+        if (target && target.scrollHeight > target.clientHeight) {
+            btn.style.display = 'inline';
+        }
+        btn.addEventListener('click', function() {
+            if (target.classList.contains('ts-clamped')) {
+                target.classList.remove('ts-clamped');
+                btn.textContent = 'Show less';
+            } else {
+                target.classList.add('ts-clamped');
+                btn.textContent = 'Show more';
+            }
+        });
+    });
+});
+</script>
+"""
+
+
 def _build_page(body_content, theme, extra_js=''):
     """Wrap content in a full HTML page."""
     return f'''<!DOCTYPE html>
@@ -184,6 +229,7 @@ def _build_page(body_content, theme, extra_js=''):
 <body class="ts-{theme}">
 {body_content}
 <script src="/static/js/iframeResizer.contentWindow.min.js"></script>
+{SHOW_MORE_JS}
 {extra_js}
 </body>
 </html>'''
