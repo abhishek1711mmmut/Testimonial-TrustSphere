@@ -79,13 +79,9 @@ body.ts-dark .ts-arrow { background: #374151; color: #fff; }
 
 /* Grid */
 .ts-grid {
-    display: grid; gap: 16px;
-    grid-template-columns: 1fr;
+    display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
 }
-@media (min-width: 640px) { .ts-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .ts-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1400px) { .ts-grid { grid-template-columns: repeat(4, 1fr); } }
-.ts-grid .ts-card { margin-bottom: 0; }
+.ts-grid .ts-card { width: 300px; margin-bottom: 0; }
 
 .ts-footer { text-align: center; margin-top: 20px; }
 .ts-footer a { font-size: 12px; text-decoration: none; }
