@@ -2,8 +2,8 @@ import Signup from "@/components/Auth/Signup";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign Up Page - Solid SaaS Boilerplate",
-  description: "This is Sign Up page for Startup Pro",
+  title: "Create Your Account - TrustSphere",
+  description: "Start collecting text and video testimonials with your free TrustSphere account.",
   // other metadata
 };
 

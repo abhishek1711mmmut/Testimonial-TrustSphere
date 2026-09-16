@@ -12,7 +12,7 @@ const Hero = () => {
             Ready to Hear What Your Customers Say?
           </h4>
           <h1 className="mx-auto mb-5 text-center text-3xl font-bold text-black dark:text-white md:w-2/5 xl:text-hero">
-            Easily collect, curate, and show your Testimonials
+            Let your customers tell your story
           </h1>
           <p className="mx-auto text-center text-lg font-medium tracking-[0.02em] text-black dark:text-gray-300 md:w-4/5 lg:w-4/6">
             Collecting testimonials is hard, we get it! So we built TrustSphere.
@@ -29,7 +29,7 @@ const Hero = () => {
             </Link>
 
             <p className="mt-5 text-center text-black dark:text-white">
-              Get started with free credits on us.
+              Start with a free space for your customer stories.
             </p>
           </div>
           <motion.div
@@ -73,17 +73,17 @@ const Hero = () => {
                   height={21.66}
                   className="absolute -right-6.5 bottom-0 z-1"
                 />
-                <div className="relative aspect-[700/444] w-full">
+                <div className="relative aspect-[3/2] w-full">
                   <Image
-                    className="shadow-solid-l dark:hidden"
-                    src="/images/hero/hero-light.svg"
-                    alt="Hero"
+                    className="rounded-2xl object-cover shadow-solid-l dark:hidden"
+                    src="/images/testimonials/hero-light.webp"
+                    alt="Illustration of text reviews, star ratings, and video testimonials"
                     fill
                   />
                   <Image
-                    className="hidden shadow-solid-l dark:block"
-                    src="/images/hero/hero-dark.svg"
-                    alt="Hero"
+                    className="hidden rounded-2xl object-cover shadow-solid-l dark:block"
+                    src="/images/testimonials/hero-dark.webp"
+                    alt="Illustration of text reviews, star ratings, and video testimonials"
                     fill
                   />
                 </div>

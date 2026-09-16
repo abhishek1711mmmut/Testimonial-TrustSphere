@@ -11,9 +11,9 @@ const Blog = async () => {
         <div className="animate_top mx-auto text-center">
           <SectionHeader
             headerInfo={{
-              title: `NEWS & BLOGS`,
-              subtitle: `Latest News & Blogs`,
-              description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. In convallis tortor eros. Donec vitae tortor lacus. Phasellus aliquam ante in maximus.`,
+              title: `THE TESTIMONIAL GUIDE`,
+              subtitle: `Make room for customer stories.`,
+              description: `Practical guides to asking for feedback, collecting customer stories, and sharing testimonials on your website.`,
             }}
           />
         </div>

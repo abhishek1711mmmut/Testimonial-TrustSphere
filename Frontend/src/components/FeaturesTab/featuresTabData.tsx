@@ -2,29 +2,29 @@ import { FeatureTab } from "@/types/featureTab";
 
 const featuresTabData: FeatureTab[] = [
   {
-    id: "tabOne",
-    title: "TrustSphere Has Neat & Clean User Interface.",
-    desc1: `Experience the simplicity and intuitiveness of TrustSphere's sleek interface, designed to make your interactions seamless and enjoyable.`,
-    desc2: `TrustSphere's uncluttered design ensures a distraction-free environment, allowing you to focus on what matters most.`,
-    image: "/images/features/features-light-01.png",
-    imageDark: "/images/features/features-dark-01.svg",
+    "id": "tabOne",
+    "title": "A space for every customer story.",
+    "desc1": "Create a collection page for your business, product, or service. Add your logo, a welcome message, and questions that help customers get started.",
+    "desc2": "Share one link. Your customers can leave a text or video testimonial without creating an account.",
+    "image": "/images/testimonials/collection-light.svg",
+    "imageDark": "/images/testimonials/collection-dark.svg"
   },
   {
-    id: "tabTwo",
-    title: "Ready to Use for Your Business.",
-    desc1: `TrustSphere is designed to cater to businesses of all sizes, from startups to large enterprises.`,
-    desc2: `Whether you're a small business or a large corporation, TrustSphere's templates cater to your specific needs.`,
-    image: "/images/features/features-light-01.png",
-    imageDark: "/images/features/features-dark-01.svg",
+    "id": "tabTwo",
+    "title": "Keep your feedback in one place.",
+    "desc1": "Open your inbox to browse the text and video testimonials collected for each space.",
+    "desc2": "Read customer stories, view their photos, play their videos, and remove submissions you no longer need.",
+    "image": "/images/testimonials/inbox-light.svg",
+    "imageDark": "/images/testimonials/inbox-dark.svg"
   },
   {
-    id: "tabThree",
-    title: "Functional Integrations for a Better Experience.",
-    desc1: `TrustSphere's integrations are designed to enhance your customer feedback experience.`,
-    desc2: `TrustSphere's integrations ensure that your testimonials are displayed in the most effective and engaging manner.`,
-    image: "/images/features/features-light-01.png",
-    imageDark: "/images/features/features-dark-01.svg",
-  },
+    "id": "tabThree",
+    "title": "Customer stories, ready to share.",
+    "desc1": "Display a full Wall of Love or highlight a single testimonial on your website.",
+    "desc2": "Choose a grid or carousel, select a light or dark theme, and copy your embed code. Your widget loads the latest testimonials when visitors open the page.",
+    "image": "/images/testimonials/wall-light.svg",
+    "imageDark": "/images/testimonials/wall-dark.svg"
+  }
 ];
 
 export default featuresTabData;

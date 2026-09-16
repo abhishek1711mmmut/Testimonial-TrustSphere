@@ -11,9 +11,9 @@ const Integration = () => {
           {/* <!-- Section Title Start --> */}
           <SectionHeader
             headerInfo={{
-              title: `INTEGRATIONS`,
-              subtitle: `Remotely Maintain Your Data, From Anywhere, Anytime.`,
-              description: `TrustSphere is a platform that makes it easy to showcase your customer feedback. With our user-friendly interface and powerful features, you can collect and share testimonials from your customers in minutes.`,
+              title: `COLLECT. MANAGE. SHARE.`,
+              subtitle: `Great feedback deserves to be seen.`,
+              description: `From a shared collection link to a Wall of Love on your website, bring text, video, photos, and ratings together in one simple workflow.`,
             }}
           />
 
@@ -61,8 +61,8 @@ const Integration = () => {
                 <Image
                   width={50}
                   height={50}
-                  src="./images/brand/brand-07.svg"
-                  alt="Brand"
+                  src="/images/testimonials/text.svg"
+                  alt="Text testimonials"
                 />
               </div>
             </motion.div>
@@ -108,8 +108,8 @@ const Integration = () => {
                 <Image
                   width={50}
                   height={50}
-                  src="./images/brand/brand-08.svg"
-                  alt="Brand"
+                  src="/images/testimonials/video.svg"
+                  alt="Video testimonials"
                 />
               </div>
             </motion.div>
@@ -157,8 +157,8 @@ const Integration = () => {
                 <Image
                   width={50}
                   height={50}
-                  src="./images/brand/brand-09.svg"
-                  alt="Brand"
+                  src="/images/testimonials/star.svg"
+                  alt="Customer ratings"
                 />
               </div>
             </motion.div>
@@ -225,8 +225,8 @@ const Integration = () => {
                 <Image
                   width={50}
                   height={50}
-                  src="./images/brand/brand-10.svg"
-                  alt="Brand"
+                  src="/images/testimonials/link.svg"
+                  alt="Shareable collection links"
                 />
               </div>
             </motion.div>
@@ -274,8 +274,8 @@ const Integration = () => {
                 <Image
                   width={50}
                   height={50}
-                  src="./images/brand/brand-11.svg"
-                  alt="Brand"
+                  src="/images/testimonials/grid.svg"
+                  alt="Wall of Love"
                 />
               </div>
             </motion.div>
@@ -323,8 +323,8 @@ const Integration = () => {
                 <Image
                   width={50}
                   height={50}
-                  src="./images/brand/brand-12.svg"
-                  alt="Brand"
+                  src="/images/testimonials/code.svg"
+                  alt="Website embed code"
                 />
               </div>
             </motion.div>

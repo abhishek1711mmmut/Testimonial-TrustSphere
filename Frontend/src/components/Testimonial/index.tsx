@@ -20,9 +20,9 @@ const Testimonial = () => {
           <div className="animate_top mx-auto text-center">
             <SectionHeader
               headerInfo={{
-                title: `TESTIMONIALS`,
-                subtitle: `Client’s Testimonials`,
-                description: `See what our satisfied clients have to say about their experience with us. Real feedback from real customers, showcasing the trust and value we bring to their businesses.`,
+                title: `TESTIMONIAL EXAMPLES`,
+                subtitle: `Go beyond “great service.”`,
+                description: `Helpful testimonials explain the challenge, the experience, and what changed. Explore these fictional examples for inspiration—not endorsements from TrustSphere customers.`,
               }}
             />
           </div>

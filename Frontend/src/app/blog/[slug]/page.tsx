@@ -1,6 +1,6 @@
 import BlogData from "@/components/Blog/blogData";
 import RelatedPost from "@/components/Blog/RelatedPost";
-import SharePost from "@/components/Blog/SharePost";
+import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 const SingleBlogPage = async ({ params }: { params: { slug: string } }) => {
   const blog = BlogData.find((blog) => blog._id === Number(params.slug));
+  if (!blog) notFound();
   return (
     <>
       <section className="pb-20 pt-35 lg:pb-25 lg:pt-45 xl:pb-30 xl:pt-50">
@@ -19,56 +20,31 @@ const SingleBlogPage = async ({ params }: { params: { slug: string } }) => {
           <div className="flex flex-col-reverse gap-7.5 lg:flex-row xl:gap-12.5">
             <div className="md:w-1/2 lg:w-[32%]">
               <div className="animate_top mb-10 rounded-md border border-stroke bg-white p-3.5 shadow-solid-13 dark:border-strokedark dark:bg-blacksection">
-                <form
-                  action="https://formbold.com/s/unique_form_id"
-                  method="POST"
-                >
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search Here..."
-                      className="w-full rounded-lg border border-stroke px-6 py-4 shadow-solid-12 focus:border-primary focus:outline-none dark:border-strokedark dark:bg-black dark:shadow-none dark:focus:border-primary"
-                    />
-
-                    <button
-                      className="absolute right-0 top-0 p-5"
-                      aria-label="search-icon"
-                    >
-                      <svg
-                        className="fill-black transition-all duration-300 hover:fill-primary dark:fill-white dark:hover:fill-primary"
-                        width="21"
-                        height="21"
-                        viewBox="0 0 21 21"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M16.031 14.617L20.314 18.899L18.899 20.314L14.617 16.031C13.0237 17.3082 11.042 18.0029 9 18C4.032 18 0 13.968 0 9C0 4.032 4.032 0 9 0C13.968 0 18 4.032 18 9C18.0029 11.042 17.3082 13.0237 16.031 14.617ZM14.025 13.875C15.2941 12.5699 16.0029 10.8204 16 9C16 5.132 12.867 2 9 2C5.132 2 2 5.132 2 9C2 12.867 5.132 16 9 16C10.8204 16.0029 12.5699 15.2941 13.875 14.025L14.025 13.875Z" />
-                      </svg>
-                    </button>
-                  </div>
-                </form>
+                <a href="/how-it-works" className="block rounded-lg px-6 py-4 text-black hover:text-primary dark:text-white">
+                  New to TrustSphere? Read the getting started guide →
+                </a>
               </div>
 
               <div className="animate_top mb-10 rounded-md border border-stroke bg-white p-9 shadow-solid-13 dark:border-strokedark dark:bg-blacksection">
                 <h4 className="mb-7.5 text-2xl font-semibold text-black dark:text-white">
-                  Categories
+                  Explore TrustSphere
                 </h4>
 
                 <ul>
                   <li className="mb-3 transition-all duration-300 last:mb-0 hover:text-primary">
-                    <a href="#">Blog</a>
+                    <a href="/blog">All Guides</a>
                   </li>
                   <li className="mb-3 transition-all duration-300 last:mb-0 hover:text-primary">
-                    <a href="#">Events</a>
+                    <a href="/how-it-works#collect">Collect Feedback</a>
                   </li>
                   <li className="mb-3 transition-all duration-300 last:mb-0 hover:text-primary">
-                    <a href="#">Grids</a>
+                    <a href="/how-it-works#manage">Manage Testimonials</a>
                   </li>
                   <li className="mb-3 transition-all duration-300 last:mb-0 hover:text-primary">
-                    <a href="#">News</a>
+                    <a href="/how-it-works#display">Embed Your Wall</a>
                   </li>
                   <li className="mb-3 transition-all duration-300 last:mb-0 hover:text-primary">
-                    <a href="#">Rounded</a>
+                    <a href="/testimonials">Testimonial Examples</a>
                   </li>
                 </ul>
               </div>
@@ -81,8 +57,8 @@ const SingleBlogPage = async ({ params }: { params: { slug: string } }) => {
                 <div className="mb-10 w-full overflow-hidden">
                   <div className="relative aspect-[97/60] w-full sm:aspect-[97/44]">
                     <Image
-                      src={"/images/blog/blog-01.png"}
-                      alt="Kobe Steel plant that supplied"
+                      src={blog.mainImage}
+                      alt={blog.title}
                       fill
                       className="rounded-md object-cover object-center"
                     />
@@ -96,65 +72,30 @@ const SingleBlogPage = async ({ params }: { params: { slug: string } }) => {
                 <ul className="mb-9 flex flex-wrap gap-5 2xl:gap-7.5">
                   <li>
                     <span className="text-black dark:text-white">Author: </span>{" "}
-                    Jhon Doe
+                    TrustSphere
                   </li>
                   <li>
                     <span className="text-black dark:text-white">
-                      Published On: July 30, 2023
+                      Practical Guide
                     </span>{" "}
                   </li>
                   <li>
                     <span className="text-black dark:text-white">
                       Category:
                     </span>
-                    Events
+                    Customer Stories
                   </li>
                 </ul>
 
                 <div className="blog-details">
                   <p>{blog?.metadata}</p>
 
-                  <p>
-                    Aenean augue ex, condimentum vel metus vitae, aliquam porta
-                    elit. Quisque non metus ac orci mollis posuere. Mauris vel
-                    ipsum a diam interdum ultricies sed vitae neque. Nulla
-                    porttitor quam vitae pulvinar placerat. Nulla fringilla elit
-                    sit amet justo feugiat sodales. Morbi eleifend, enim non
-                    eleifend laoreet, odio libero lobortis lectus, non porttitor
-                    sem urna sit amet metus. In sollicitudin quam est,
-                    pellentesque consectetur felis fermentum vitae.
-                  </p>
-
-                  <div className="flex flex-wrap gap-5">
-                    <Image
-                      src={"/images/blog/blog-01.png"}
-                      width={350}
-                      height={200}
-                      alt="image"
-                    />
-                    <Image
-                      src={"/images/blog/blog-02.png"}
-                      width={350}
-                      height={200}
-                      alt="image"
-                    />
-                  </div>
-
-                  <h3 className="pt-8">
-                    Nunc elementum elit viverra, tempus quam non
-                  </h3>
-
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nunc quis nibh lorem. Duis sed odio lorem. In a efficitur
-                    leo. Ut venenatis rhoncus quam sed condimentum. Curabitur
-                    vel turpis in dolor volutpat imperdiet in ut mi. Integer non
-                    volutpat nulla. Nunc elementum elit viverra, tempus quam
-                    non, interdum ipsum.
-                  </p>
+                  {blog.body?.split("\n\n").map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
                 </div>
 
-                <SharePost />
+                <a href="/auth/signup" className="mt-8 inline-block text-primary">Start collecting your customer stories →</a>
               </div>
             </div>
           </div>

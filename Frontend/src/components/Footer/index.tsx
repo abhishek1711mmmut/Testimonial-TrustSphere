@@ -36,23 +36,23 @@ const Footer = () => {
                 >
                   <a href="/" className="relative">
                     <Image
-                      width={110}
-                      height={80}
+                      width={184}
+                      height={36}
                       src="/images/logo/logo-light.svg"
-                      alt="Logo"
+                      alt="TrustSphere"
                       className="dark:hidden"
                     />
                     <Image
-                      width={110}
-                      height={80}
+                      width={184}
+                      height={36}
                       src="/images/logo/logo-dark.svg"
-                      alt="Logo"
+                      alt="TrustSphere"
                       className="hidden dark:block"
                     />
                   </a>
 
                   <p className="mb-10 mt-5">
-                    Join us now and start experiencing the difference today!
+                    Collect customer stories. Share them with confidence.
                   </p>
 
                   <p className="mb-1.5 text-sectiontitle uppercase tracking-[5px]">

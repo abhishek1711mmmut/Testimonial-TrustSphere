@@ -187,24 +187,24 @@ const Contact = () => {
 
               <div className="5 mb-7">
                 <h3 className="mb-4 text-metatitle3 font-medium text-black dark:text-white">
-                  Our Loaction
+                  Our Location
                 </h3>
-                <p>Ballia, Uttar Pradesh, India</p>
+                <p>Bengaluru, Karnataka, India</p>
               </div>
               <div className="5 mb-7">
                 <h3 className="mb-4 text-metatitle3 font-medium text-black dark:text-white">
                   Email Address
                 </h3>
                 <p>
-                  <a href="#">abhishek002kvs@gmail.com</a>
+                  <a href="mailto:abhishek002kvs@gmail.com">abhishek002kvs@gmail.com</a>
                 </p>
               </div>
               <div>
                 <h4 className="mb-4 text-metatitle3 font-medium text-black dark:text-white">
-                  Phone Number
+                  Getting Started
                 </h4>
                 <p>
-                  <a href="#">+91 917043****</a>
+                  <a href="/how-it-works">Read the collection and embed guide</a>
                 </p>
               </div>
             </motion.div>

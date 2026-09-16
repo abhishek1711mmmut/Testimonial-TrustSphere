@@ -2,47 +2,41 @@ import { Feature } from "@/types/feature";
 
 const featuresData: Feature[] = [
   {
-    id: 1,
-    icon: "/images/icon/icon-01.svg",
-    title: "Easy Review Collection",
-    description:
-      "Easily generate links to collect customer reviews with simple and minimal effort.",
+    "id": 1,
+    "icon": "/images/testimonials/link-white.svg",
+    "title": "Easy Review Collection",
+    "description": "Share a branded collection link so customers can leave feedback without signing up."
   },
   {
-    id: 2,
-    icon: "/images/icon/icon-02.svg",
-    title: "Customizable Embeds",
-    description:
-      "Seamlessly embed testimonials on your website with flexible customization options.",
+    "id": 2,
+    "icon": "/images/testimonials/code-white.svg",
+    "title": "Customizable Embeds",
+    "description": "Choose a grid or carousel, with a light or dark theme to suit your website."
   },
   {
-    id: 3,
-    icon: "/images/icon/icon-03.svg",
-    title: "Photo & Video Reviews",
-    description:
-      "Let customers upload photos or videos with their testimonials to enhance credibility.",
+    "id": 3,
+    "icon": "/images/testimonials/video-white.svg",
+    "title": "Photo & Video Reviews",
+    "description": "Collect written stories with photos, or let customers record and upload a video."
   },
   {
-    id: 4,
-    icon: "/images/icon/icon-04.svg",
-    title: "Real-Time Updates",
-    description:
-      "Instantly showcase newly submitted testimonials to keep your site content fresh.",
+    "id": 4,
+    "icon": "/images/testimonials/grid-white.svg",
+    "title": "A Wall of Love",
+    "description": "Display your collected testimonials together, or highlight one customer story."
   },
   {
-    id: 5,
-    icon: "/images/icon/icon-05.svg",
-    title: "Advanced Analytics",
-    description:
-      "Track and analyze all customer feedback with insightful, easy-to-read data.",
+    "id": 5,
+    "icon": "/images/testimonials/text-white.svg",
+    "title": "An Organized Inbox",
+    "description": "Browse testimonials by space and keep your customer feedback in one place."
   },
   {
-    id: 6,
-    icon: "/images/icon/icon-06.svg",
-    title: "Secure & Private",
-    description:
-      "Ensure reviews are genuine and secure with verified, private customer submissions.",
-  },
+    "id": 6,
+    "icon": "/images/testimonials/star-white.svg",
+    "title": "Your Brand, Your Questions",
+    "description": "Personalize your collection page with a logo, welcome message, and questions."
+  }
 ];
 
 export default featuresData;

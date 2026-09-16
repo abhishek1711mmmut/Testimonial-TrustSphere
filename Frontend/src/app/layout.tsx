@@ -13,8 +13,9 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "TrustSphere",
+  icons: { icon: "/icon.svg", shortcut: "/icon.svg" },
   description:
-    "Discover and share authentic reviews effortlessly with TrustSphere. Our modern platform connects you with genuine feedback and testimonials, helping you make informed decisions and build trust. Join the conversation and see what others are saying today!",
+    "Collect text and video testimonials with a branded link, manage customer stories, and display them on your website with TrustSphere.",
 };
 
 export default function RootLayout({

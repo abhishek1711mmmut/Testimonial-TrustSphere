@@ -26,17 +26,17 @@ const About = () => {
               whileInView="visible"
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
-              className="animate_left relative mx-auto hidden aspect-[588/526.5] md:block md:w-1/2"
+              className="animate_left relative mx-auto hidden aspect-[600/538] md:block md:w-1/2"
             >
               <Image
-                src="/images/about/about-light-01.png"
-                alt="About"
+                src="/images/testimonials/about-collection-light.svg"
+                alt="Illustration of collecting and displaying customer testimonials"
                 className="dark:hidden"
                 fill
               />
               <Image
-                src="/images/about/about-dark-01.png"
-                alt="About"
+                src="/images/testimonials/about-collection-dark.svg"
+                alt="Illustration of collecting and displaying customer testimonials"
                 className="hidden dark:block"
                 fill
               />
@@ -66,7 +66,7 @@ const About = () => {
                 Testimonials for Everyone
               </div>
               <h2 className="relative mb-6 text-3xl font-bold text-black dark:text-white xl:text-hero max-md:text-center">
-                Testimonial Collection
+                Testimonial Collection{" "}
                 <span className="relative inline-block before:absolute before:bottom-2.5 before:left-0 before:-z-1 before:h-3 before:w-full before:bg-titlebg dark:before:bg-titlebgdark">
                   Made Easy
                 </span>
@@ -97,9 +97,9 @@ const About = () => {
                 </div>
                 <div className="w-3/4">
                   <h3 className="mb-0.5 text-metatitle2 text-black dark:text-white">
-                    Fully Customizable
+                    Make It Your Own
                   </h3>
-                  <p>Customize the look and feel of your testimonials.</p>
+                  <p>Add your logo, welcome message, and questions.</p>
                 </div>
               </div>
             </motion.div>
@@ -134,23 +134,23 @@ const About = () => {
                 Launch Your Testimonial Collection Fast
               </h4>
               <h2 className="relative mb-6 text-3xl font-bold text-black dark:text-white xl:text-hero">
-                Packed with All Essential
+                Bring Your Customer Stories to{" "}
                 <span className="relative inline-block before:absolute before:bottom-2.5 before:left-0 before:-z-1 before:h-3 before:w-full before:bg-titlebg2 dark:before:bg-titlebgdark">
-                  Integrations.
+                  Your Website.
                 </span>
               </h2>
               <p>
-                Our platform is packed with all the essential features you need
-                to showcase your customer feedback. From easy-to-use
-                integrations to customizable templates, we&apos;ve got you covered.
+                Turn your collected feedback into a Wall of Love. Choose a grid
+                or carousel, match your website with a light or dark theme,
+                and copy the embed code to share your customer stories.
               </p>
               <div>
                 <a
-                  href="#"
+                  href="/how-it-works#display"
                   className="group mt-7.5 inline-flex items-center gap-2.5 text-black hover:text-primary dark:text-white dark:hover:text-primary"
                 >
                   <span className="duration-300 group-hover:pr-2">
-                    Know More
+                    See How It Works
                   </span>
                   <svg
                     width="14"
@@ -179,17 +179,17 @@ const About = () => {
               whileInView="visible"
               transition={{ duration: 1, delay: 0.1 }}
               viewport={{ once: true }}
-              className="animate_right relative mx-auto hidden aspect-[588/526.5] md:block md:w-1/2"
+              className="animate_right relative mx-auto hidden aspect-[600/538] md:block md:w-1/2"
             >
               <Image
-                src="./images/about/about-light-02.svg"
-                alt="About"
+                src="/images/testimonials/about-wall-light.svg"
+                alt="Illustration of collecting and displaying customer testimonials"
                 className="dark:hidden"
                 fill
               />
               <Image
-                src="./images/about/about-dark-02.svg"
-                alt="About"
+                src="/images/testimonials/about-wall-dark.svg"
+                alt="Illustration of collecting and displaying customer testimonials"
                 className="hidden dark:block"
                 fill
               />
