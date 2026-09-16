@@ -34,7 +34,6 @@ const Header = () => {
     setIsAuth(false);
     setUserId(null);
     localStorage.removeItem("userId");
-    document.cookie = "ts_auth=; path=/; max-age=0";
   };
 
   useEffect(() => {

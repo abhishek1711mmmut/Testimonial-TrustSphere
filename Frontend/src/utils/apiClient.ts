@@ -2,7 +2,8 @@ import axios from "axios";
 import { startLoading, stopLoading } from "./loadingStore";
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_FLASK_API_URL,
+  // Next.js forwards /api requests to Flask on the server.
+  baseURL: "/",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -21,9 +22,8 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     stopLoading();
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && error.config?.url !== "/api/auth/login") {
       localStorage.removeItem("userId");
-      document.cookie = "ts_auth=; path=/; max-age=0";
       window.location.href = "/auth/signin";
     }
     return Promise.reject(error);

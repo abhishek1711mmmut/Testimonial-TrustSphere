@@ -5,8 +5,8 @@ export const config = {
 };
 
 export function middleware(request: NextRequest) {
-  const isLoggedIn =
-    request.cookies.has("access_token") || request.cookies.has("ts_auth");
+  // Presence is a navigation hint; Flask validates the JWT for protected APIs.
+  const isLoggedIn = Boolean(request.cookies.get("access_token")?.value);
   const isAuthPage = request.nextUrl.pathname.startsWith("/auth");
 
   if (isAuthPage && isLoggedIn) {

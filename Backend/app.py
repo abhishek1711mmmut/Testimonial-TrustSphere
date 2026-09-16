@@ -1,8 +1,7 @@
 from flask import Flask, jsonify
-from flask_jwt_extended import JWTManager
+from config.auth import init_auth
 from dotenv import load_dotenv
 from config import database
-from datetime import timedelta
 from utils.mailSender import init_mail
 from flask_cors import CORS
 import os
@@ -34,10 +33,6 @@ if os.getenv('MYSQL_SSL', 'false').lower() == 'true':
         'ssl_mode': 'REQUIRED',
     }
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token"
-app.config["JWT_COOKIE_CSRF_PROTECT"] = False
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=3)
 app.config['CORS_HEADERS'] = 'Content-Type'
 # Configure Flask-Mail with your email settings
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
@@ -52,7 +47,7 @@ init_mail(app)
 # Initialize the db
 database.init_db(app)
 # Configure JWT
-jwt = JWTManager(app)
+jwt = init_auth(app)
 
 
 

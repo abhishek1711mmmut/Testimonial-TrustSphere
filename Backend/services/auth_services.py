@@ -1,10 +1,8 @@
-from flask import jsonify, request, make_response
-from flask_jwt_extended import create_access_token, get_jwt_identity
+from flask import jsonify, request, make_response, current_app
+from flask_jwt_extended import create_access_token, get_jwt_identity, set_access_cookies, unset_access_cookies
 from config.database import mysql
-import os
 from utils.email_templates import otp_email_body
 from utils.mailSender import send_email
-from datetime import datetime, timedelta
 import random
 import bcrypt
 
@@ -68,11 +66,11 @@ def login_logic():
             return jsonify({"message": "Invalid credentials", "success": "false"}), 401     
         # Create JWT token
         access_token = create_access_token(identity=str(user[0]))
-        expire = datetime.now() + timedelta(days=3)
         # return jsonify({"access_token": access_token, "success": "true", "message": "Login successful"}), 200
         response = make_response(jsonify({"success": "true", "message": "Login successful"}), 200)
-        is_prod = os.getenv('FLASK_ENV') == 'production'
-        response.set_cookie('access_token', access_token, httponly=True, expires=expire, samesite='None' if is_prod else 'Lax', secure=is_prod, path='/', domain=os.getenv('COOKIE_DOMAIN', None))
+        set_access_cookies(response, access_token, max_age=int(
+            current_app.config['JWT_ACCESS_TOKEN_EXPIRES'].total_seconds()
+        ))
         return response
     except Exception as e:
         return jsonify({"message": "Unable to login", "success": "false", "error": str(e)}), 500    
@@ -136,8 +134,7 @@ def verify_otp_logic(email, otp):
 def logout_logic():
     try:
         response = make_response(jsonify({"message": "Logged out successfully", "success": True}), 200)
-        is_prod = os.getenv('FLASK_ENV') == 'production'
-        response.set_cookie('access_token', '', max_age=0, httponly=True, samesite='None' if is_prod else 'Lax', secure=is_prod, path='/', domain=os.getenv('COOKIE_DOMAIN', None))
+        unset_access_cookies(response)
         return response
     except Exception as e:
         return {
