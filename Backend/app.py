@@ -41,6 +41,7 @@ app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
+app.config['SUPPORT_EMAIL'] = os.getenv('SUPPORT_EMAIL', 'abhishek002kvs@gmail.com')
 # Initialize Mail
 init_mail(app)
 
@@ -53,10 +54,12 @@ jwt = init_auth(app)
 
 # Import routes
 from routes import auth_routes as auth, space_routes as space, testimonial_routes as testimonial, embed_routes as embed
+from routes import support_routes as support
 app.register_blueprint(auth.bp)
 app.register_blueprint(space.bp)
 app.register_blueprint(testimonial.bp)
 app.register_blueprint(embed.bp)
+app.register_blueprint(support.bp)
 
 # create a simple "/" route that print welcome message
 @app.route('/api')

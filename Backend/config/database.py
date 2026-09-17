@@ -26,6 +26,8 @@ def create_tables_if_not_exist():
     with open('sql/create_testimonials_table.sql', 'r') as sql_file:
         sql_script = sql_file.read()
         cursor.execute(sql_script)
+    with open('sql/create_support_rate_limits_table.sql', 'r') as sql_file:
+        cursor.execute(sql_file.read())
     mysql.connection.commit()
     seed_plans(cursor)
     cursor.close()

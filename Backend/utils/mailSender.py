@@ -5,7 +5,7 @@ mail=Mail()
 def init_mail(app):
     mail.init_app(app)
 
-def send_email(subject, recipient, body):
+def send_email(subject, recipient, body, reply_to=None):
     """
     Sends an email using Flask-Mail.
 
@@ -18,7 +18,8 @@ def send_email(subject, recipient, body):
         msg = Message(
             subject, 
             sender=os.getenv('MAIL_USERNAME'),
-            recipients=[recipient])
+            recipients=[recipient],
+            reply_to=reply_to)
         msg.body = body
         mail.send(msg)
         return {"success": True, "message": "Email sent successfully."}
