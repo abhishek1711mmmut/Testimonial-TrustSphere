@@ -9,6 +9,14 @@ body.ts-light { background: transparent; color: #111827; }
 
 .ts-container { padding: 16px; }
 
+/* Keep individual embeds readable, including previously copied full-width iframes. */
+body.ts-single { background: transparent; }
+.ts-single .ts-container { width: 100%; max-width: 640px; margin: 0 auto; }
+.ts-single.ts-dark .ts-container { background: #111827; }
+.ts-single .ts-card { overflow-wrap: anywhere; }
+.ts-single .ts-reviewer > div { min-width: 0; }
+.ts-single .ts-avatar, .ts-single .ts-avatar-placeholder { flex-shrink: 0; }
+
 .ts-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .ts-header img { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; }
 .ts-header h2 { font-size: 18px; font-weight: 600; }
@@ -213,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
 """
 
 
-def _build_page(body_content, theme, extra_js=''):
+def _build_page(body_content, theme, extra_js='', single=False):
     """Wrap content in a full HTML page."""
     return f'''<!DOCTYPE html>
 <html>
@@ -222,7 +230,7 @@ def _build_page(body_content, theme, extra_js=''):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>{EMBED_CSS}</style>
 </head>
-<body class="ts-{theme}">
+<body class="ts-{theme}{' ts-single' if single else ''}">
 {body_content}
 <script src="/static/js/iframeResizer.contentWindow.min.js"></script>
 {SHOW_MORE_JS}
@@ -294,7 +302,7 @@ def render_single_testimonial(space_id, testimonial_id):
     card_html = _render_card(testimonials[0])
     footer = '<div class="ts-footer"><a href="/" target="_blank" rel="noopener noreferrer">Powered by TrustSphere</a></div>'
     body = f'<div class="ts-container">{card_html}{footer}</div>'
-    html = _build_page(body, theme)
+    html = _build_page(body, theme, single=True)
 
     response = make_response(html)
     response.headers['Content-Type'] = 'text/html'

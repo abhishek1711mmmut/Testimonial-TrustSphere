@@ -86,7 +86,10 @@ const EmbedPage = () => {
       embedType === "single" && selectedTestimonial
         ? `trustsphere-t-${selectedTestimonial.id}`
         : `trustsphere-${selectedSpace.id}`;
-    return `<script src="${origin}/js/iframeResizer.min.js"></script>\n<iframe id="${uniqueId}" src="${embedUrl}" frameborder="0" scrolling="no" style="width:100%;border:none;"></iframe>\n<script>iFrameResize({ log: false, checkOrigin: false }, '#${uniqueId}')</script>`;
+    const frameStyle = embedType === "single"
+      ? "width:100%;max-width:640px;display:block;margin:0 auto;border:none;"
+      : "width:100%;border:none;";
+    return `<script src="${origin}/js/iframeResizer.min.js"></script>\n<iframe id="${uniqueId}" src="${embedUrl}" frameborder="0" scrolling="no" style="${frameStyle}"></iframe>\n<script>iFrameResize({ log: false, checkOrigin: false }, '#${uniqueId}')</script>`;
   };
 
   const initIframeResizer = useCallback(() => {
@@ -417,7 +420,7 @@ const EmbedPage = () => {
               <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
                 Live Preview
               </h3>
-              <div className="overflow-hidden rounded-lg border dark:border-gray-600">
+              <div className={`overflow-hidden rounded-lg border dark:border-gray-600 ${embedType === "single" ? "mx-auto w-full max-w-[640px]" : ""}`}>
                 <iframe
                   id="embed-preview"
                   key={getEmbedUrl()}
