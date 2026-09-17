@@ -107,16 +107,19 @@ const Contact = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-4 xl:justify-between">
-                  <div className="mb-4 flex md:mb-0">
+                  <label
+                    htmlFor="default-checkbox"
+                    className="mb-4 flex cursor-pointer md:mb-0"
+                  >
                     <input
                       id="default-checkbox"
                       type="checkbox"
                       required
                       className="peer sr-only"
                     />
-                    <span className="group mt-2 flex h-5 min-w-[20px] items-center justify-center rounded border-gray-300 bg-gray-100 text-blue-600 peer-checked:bg-primary dark:border-gray-600 dark:bg-gray-700">
+                    <span aria-hidden="true" className="mt-2 flex h-5 min-w-[20px] items-center justify-center rounded border-gray-300 bg-gray-100 text-blue-600 peer-checked:bg-primary peer-checked:[&_svg]:opacity-100 peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus-visible:ring-offset-blacksection">
                       <svg
-                        className="opacity-0 peer-checked:group-[]:opacity-100"
+                        className="opacity-0"
                         width="10"
                         height="8"
                         viewBox="0 0 10 8"
@@ -131,14 +134,13 @@ const Contact = () => {
                         />
                       </svg>
                     </span>
-                    <label
-                      htmlFor="default-checkbox"
+                    <span
                       className="flex max-w-[425px] cursor-pointer select-none pl-5"
                     >
                       By clicking Checkbox, you agree to use our TrustSphere
                       terms and consent cookie usage in browser.
-                    </label>
-                  </div>
+                    </span>
+                  </label>
 
                   <button
                     aria-label="send message"

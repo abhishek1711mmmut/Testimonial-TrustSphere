@@ -2,6 +2,19 @@
 
 Documented for interview reference — real issues encountered while building TrustSphere.
 
+## Updated authentication challenge (September 16, 2026)
+
+Use [Login failed in incognito after deployment](../docs/challenges-faced/cross-site-cookie-authentication.md)
+for the current implementation, request-flow diagram, verification, and interview answer.
+
+Corrections to the historical explanations below: cookies are **not scoped by
+port**, so `localhost:3000` and `localhost:5000` do not require a Domain attribute
+merely to share a host cookie. Different ports do make requests cross-origin.
+Also, binding to `0.0.0.0` covers IPv4 interfaces; it does not by itself guarantee
+an IPv6 `::1` listener. The specific root causes asserted in historical sections
+2 and 3 should not be repeated as verified findings. The current deployment fix
+uses same-origin API proxying and host-only cookies, not `Domain=localhost`.
+
 ---
 
 ## 1. TLS Certificate Error on External Image Optimization
