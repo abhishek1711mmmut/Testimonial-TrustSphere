@@ -43,9 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
         wall.classList.remove('ts-moving');
         const count = wall.clientWidth >= 960 ? 3 : 2;
         if (wall.clientWidth < 600 || reduced.matches || wall.dataset.animation === 'off' || cards.length < 6) return;
-        const height = 560;
-        // Prefer three columns, but use two when that gives each loop enough content.
-        // Never shrink the reading area to compensate for a short column.
+        const minHeight = 250;
+        const maxHeight = 560;
         for (let columnCount = count; columnCount >= 2; columnCount--) {
             wall.replaceChildren(...cards);
             columns = [];
@@ -60,20 +59,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 columns.push({ viewport, track, offset: 0 });
             }
             wall.classList.add('ts-moving');
-            // Reserve the tallest card so every card order fills the viewport when cycling.
-            const available = Math.min(...columns.map(c => c.track.scrollHeight - Math.max(...Array.from(c.track.children).map(card => card.offsetHeight + 16))));
-            if (available >= height) {
+            // Reserve the tallest card so cycling never exposes an empty gap.
+            const height = Math.min(maxHeight, ...columns.map(c => c.track.scrollHeight - Math.max(...Array.from(c.track.children).map(card => card.offsetHeight + 16))));
+            if (height >= minHeight) {
                 columns.forEach(c => c.viewport.style.height = height + 'px');
                 schedule();
                 return;
             }
         }
-        // Too little content for a full loop: show every review as static masonry.
+        // Neither arrangement supports a readable loop; keep every review visible.
         wall.replaceChildren(...cards);
         wall.classList.remove('ts-moving');
         columns = [];
     }
-
     wall.addEventListener('mouseenter', () => hovered = true);
     wall.addEventListener('mouseleave', () => hovered = false);
     // A focused card must be fully reachable even when it was outside the moving viewport.

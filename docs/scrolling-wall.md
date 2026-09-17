@@ -13,10 +13,10 @@ The wall uses three columns on desktop and two on tablets, based on the embed's
 available width. Mobile, reduced-motion preferences, fewer than six reviews,
 and disabled animation use static masonry. Without JavaScript the cards remain
 readable. Collections with insufficient height for a loop also stay static.
-The moving viewport is fixed at 560px (excluding the heading and footer). Desktop
-tries three columns, then two if more cards per column are needed to fill the loop.
-If neither arrangement fills 560px plus the tallest card reserved for cycling, the
-wall displays static masonry instead of shrinking the viewport.
+The moving viewport adapts to available content between 250px and 560px. Desktop
+tries three columns first, then two if three cannot support the 250px minimum.
+If two columns cannot support it either, the wall stays static. The height
+calculation reserves each column's tallest card to avoid gaps while cycling.
 
 There is no visible Pause/Play button. Hovering, focusing a card,
 expanding a review, or playing a video pauses movement. Keyboard focus and expanded
