@@ -1,25 +1,68 @@
 "use client";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import { subscribe } from "@/utils/loadingStore";
 import toast from "react-hot-toast";
+import { readSession, SessionUser } from "@/api/auth";
+import { usePathname } from "next/navigation";
 
 type Context = {
   isAuth: boolean;
-  setIsAuth: (value: boolean) => void;
+  setSession: (user: SessionUser) => void;
+  clearSession: () => void;
   userId: string | null;
-  setUserId: (value: string | null) => void;
   isLoading: boolean;
 };
 
-const AppContext = createContext<Context>({} as Context);
+const AppContext = createContext<Context | undefined>(undefined);
 
 export const AppContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [user, setUser] = useState<SessionUser | null>(null);
+  const sessionRequest = useRef<AbortController | null>(null);
+  const pathname = usePathname();
+  const clearSession = useCallback(() => {
+    sessionRequest.current?.abort();
+    localStorage.removeItem("userId");
+    setUser(null);
+  }, []);
+  const setSession = useCallback((nextUser: SessionUser) => {
+    sessionRequest.current?.abort();
+    localStorage.removeItem("userId");
+    setUser(nextUser);
+  }, []);
+
+  useEffect(() => {
+    const verify = async () => {
+      sessionRequest.current?.abort();
+      const controller = new AbortController();
+      sessionRequest.current = controller;
+      localStorage.removeItem("userId");
+      try {
+        const currentUser = await readSession(controller.signal);
+        if (!controller.signal.aborted) setUser(currentUser);
+      } catch {
+        if (!controller.signal.aborted) setUser(null);
+      }
+    };
+    void verify();
+    window.addEventListener("focus", verify);
+    window.addEventListener("auth:unauthorized", clearSession);
+    return () => {
+      sessionRequest.current?.abort();
+      window.removeEventListener("focus", verify);
+      window.removeEventListener("auth:unauthorized", clearSession);
+    };
+  }, [pathname, clearSession]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const toastIdRef = useRef<string | null>(null);
 
@@ -39,10 +82,10 @@ export const AppContextProvider = ({
   }, [isLoading]);
 
   const value = {
-    isAuth,
-    setIsAuth,
-    userId,
-    setUserId,
+    isAuth: user !== null,
+    userId: user?.email.split("@")[0] ?? null,
+    setSession,
+    clearSession,
     isLoading,
   };
 

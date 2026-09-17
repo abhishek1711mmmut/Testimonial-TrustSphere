@@ -4,12 +4,12 @@ import { useAppContext } from "@/context/AppContext";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const Signin = () => {
-  const { setIsAuth, setUserId } = useAppContext();
-  const router = useRouter();
+  const { setSession, clearSession } = useAppContext();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitting = useRef(false);
 
   const [data, setData] = useState({
     email: "",
@@ -17,14 +17,20 @@ const Signin = () => {
   });
 
   const handleSubmit = async () => {
-    const res = await login(data);
-
-    if (res?.success) {
-      setIsAuth(true);
-      const userId = data.email.split("@")[0];
-      setUserId(userId);
-      localStorage.setItem("userId", userId);
-      router.push("/dashboard/overview");
+    if (submitting.current) return;
+    submitting.current = true;
+    setIsSubmitting(true);
+    clearSession();
+    try {
+      const user = await login(data);
+      if (user) {
+        setSession(user);
+        // A fresh document request avoids cached unauthenticated route redirects.
+        window.location.replace("/dashboard/overview");
+      }
+    } finally {
+      submitting.current = false;
+      setIsSubmitting(false);
     }
   };
 
@@ -151,6 +157,8 @@ const Signin = () => {
                   type="email"
                   placeholder="Email"
                   name="email"
+                  required
+                  autoComplete="email"
                   value={data.email}
                   onChange={(e) => setData({ ...data, email: e.target.value })}
                   className="w-full border-b border-stroke !bg-white pb-3.5 focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white lg:w-1/2"
@@ -160,6 +168,8 @@ const Signin = () => {
                   type="password"
                   placeholder="Password"
                   name="password"
+                  required
+                  autoComplete="current-password"
                   value={data.password}
                   onChange={(e) =>
                     setData({ ...data, password: e.target.value })
@@ -171,10 +181,11 @@ const Signin = () => {
               <div className="flex flex-col items-center gap-2 md:justify-between xl:gap-5">
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   aria-label="login with email and password"
                   className="inline-flex items-center gap-2.5 rounded-full bg-black px-6 py-3 font-medium text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
                 >
-                  Log in
+                  {isSubmitting ? "Logging in…" : "Log in"}
                   <svg
                     className="fill-white"
                     width="14"

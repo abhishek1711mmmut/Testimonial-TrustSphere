@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";
@@ -11,7 +11,7 @@ import { useAppContext } from "@/context/AppContext";
 import { logout } from "@/api/auth";
 
 const Header = () => {
-  const { isAuth, setIsAuth, userId, setUserId } = useAppContext();
+  const { isAuth, userId, clearSession } = useAppContext();
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
@@ -30,22 +30,12 @@ const Header = () => {
   useOnClickOutside(profileDropdownRef, null, () => setProfileDropdown(false));
 
   const handleLogout = async () => {
-    await logout();
-    setIsAuth(false);
-    setUserId(null);
-    localStorage.removeItem("userId");
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem("userId")) {
-      setIsAuth(true);
-      setUserId(localStorage.getItem("userId"));
-    } else {
-      setIsAuth(false);
-      setUserId(null);
-      localStorage.removeItem("userId");
+    const result = await logout();
+    if (result) {
+      clearSession();
+      window.location.replace("/auth/signin");
     }
-  }, []);
+  };
 
   return (
     <>

@@ -22,9 +22,15 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     stopLoading();
-    if (error.response?.status === 401 && error.config?.url !== "/api/auth/login") {
+    if (
+      error.response?.status === 401 &&
+      error.config?.url !== "/api/auth/login"
+    ) {
       localStorage.removeItem("userId");
-      window.location.href = "/auth/signin";
+      window.dispatchEvent(new Event("auth:unauthorized"));
+      if (window.location.pathname.startsWith("/dashboard")) {
+        window.location.replace("/auth/signin");
+      }
     }
     return Promise.reject(error);
   },

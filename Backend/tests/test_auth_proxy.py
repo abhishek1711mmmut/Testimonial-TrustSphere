@@ -48,12 +48,18 @@ class AuthCookieTests(unittest.TestCase):
     def test_login_cookie_and_authenticated_request(self):
         response = self.login()
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers["Cache-Control"], "no-store")
         cookie = response.headers["Set-Cookie"]
         for attribute in ["HttpOnly", "SameSite=Lax", "Path=/", "Max-Age=259200"]:
             self.assertIn(attribute, cookie)
         self.assertNotIn("Domain=", cookie)
         self.assertNotIn("Secure", cookie)
         self.assertEqual(self.client.get("/api/check").json["identity"], "1")
+
+    def test_session_probe_is_not_cached(self):
+        response = self.client.get("/api/auth/user")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.headers["Cache-Control"], "no-store")
 
     def test_production_secure_cookie_and_logout(self):
         self.app.config["JWT_COOKIE_SECURE"] = True

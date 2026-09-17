@@ -37,23 +37,52 @@ export const sendOtp = async (email: string) => {
   return result;
 };
 
-export const login = async (data: SigninData) => {
-  let result = null;
-  try {
-    const response = await apiClient.post("/api/auth/login", data);
-    if (!response?.data?.success) {
-      throw new Error(response.data.message);
-    }
-    result = response?.data;
-    toast.success(response?.data?.message);
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      toast.error(error.response?.data?.message || "Error logging in");
-    } else {
-      toast.error("Error logging in");
-    }
+export type SessionUser = { id: number; email: string; firstName: string };
+
+// A successful login response alone does not prove the browser retained its cookie.
+export const readSession = async (
+  signal?: AbortSignal,
+): Promise<SessionUser> => {
+  const { data } = await apiClient.get("/api/auth/user", {
+    signal,
+    timeout: 15000,
+    headers: { "Cache-Control": "no-cache" },
+  });
+  if (data.success !== true || !data.data?.email) {
+    throw new Error("Unable to verify your session.");
   }
-  return result;
+  return data.data;
+};
+
+export const login = async (data: SigninData): Promise<SessionUser | null> => {
+  let credentialsAccepted = false;
+  try {
+    const response = await apiClient.post("/api/auth/login", data, {
+      timeout: 15000,
+    });
+    if (response.data.success !== true && response.data.success !== "true") {
+      throw new Error(response.data.message || "Error logging in");
+    }
+    credentialsAccepted = true;
+    const user = await readSession();
+    toast.success("Login successful");
+    return user;
+  } catch (error) {
+    if (credentialsAccepted) {
+      toast.error(
+        axios.isAxiosError(error) && error.response?.status === 401
+          ? "Login could not establish a session. Please allow cookies for this site and try again."
+          : "Unable to verify your session. Please try again when the server is available.",
+      );
+    } else if (axios.isAxiosError(error)) {
+      toast.error(
+        error.response?.data?.message || "Unable to log in. Please try again.",
+      );
+    } else {
+      toast.error(error instanceof Error ? error.message : "Error logging in");
+    }
+    return null;
+  }
 };
 
 export const logout = async () => {

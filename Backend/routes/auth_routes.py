@@ -31,3 +31,8 @@ def logout():
 @jwt_required()
 def getUser():
     return get_user_logic()
+
+@bp.after_request
+def prevent_auth_caching(response):
+    response.headers["Cache-Control"] = "no-store"
+    return response
