@@ -36,7 +36,11 @@ const EmbedPage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [layout, setLayout] = useState<"carousel" | "grid">("carousel");
+  const [layout, setLayout] = useState<"carousel" | "grid" | "scrolling">(
+    "scrolling",
+  );
+  const [animation, setAnimation] = useState(true);
+  const [speed, setSpeed] = useState("slow");
   const [embedType, setEmbedType] = useState<"wall" | "single">("wall");
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [selectedTestimonial, setSelectedTestimonial] =
@@ -74,7 +78,7 @@ const EmbedPage = () => {
     if (embedType === "single" && selectedTestimonial) {
       return `${FLASK_URL}/embed/${selectedSpace.id}/testimonial/${selectedTestimonial.id}?theme=${theme}`;
     }
-    return `${FLASK_URL}/embed/${selectedSpace.id}?theme=${theme}&layout=${layout}`;
+    return `${FLASK_URL}/embed/${selectedSpace.id}?theme=${theme}&layout=${layout}${layout === "scrolling" ? `&animation=${animation ? "on" : "off"}&speed=${speed}` : ""}`;
   };
 
   const getEmbedCode = () => {
@@ -86,9 +90,10 @@ const EmbedPage = () => {
       embedType === "single" && selectedTestimonial
         ? `trustsphere-t-${selectedTestimonial.id}`
         : `trustsphere-${selectedSpace.id}`;
-    const frameStyle = embedType === "single"
-      ? "width:100%;max-width:640px;display:block;margin:0 auto;border:none;"
-      : "width:100%;border:none;";
+    const frameStyle =
+      embedType === "single"
+        ? "width:100%;max-width:640px;display:block;margin:0 auto;border:none;"
+        : "width:100%;border:none;";
     return `<script src="${origin}/js/iframeResizer.min.js"></script>\n<iframe id="${uniqueId}" src="${embedUrl}" frameborder="0" scrolling="no" style="${frameStyle}"></iframe>\n<script>iFrameResize({ log: false, checkOrigin: false }, '#${uniqueId}')</script>`;
   };
 
@@ -352,6 +357,14 @@ const EmbedPage = () => {
                   <div className="flex overflow-hidden rounded-lg border dark:border-gray-600">
                     <button
                       type="button"
+                      aria-pressed={layout === "scrolling"}
+                      onClick={() => setLayout("scrolling")}
+                      className={`px-4 py-2 text-sm font-medium ${layout === "scrolling" ? "bg-blue-600 text-white" : "bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-300"}`}
+                    >
+                      Scrolling Wall
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setLayout("carousel")}
                       className={`px-4 py-2 text-sm font-medium ${
                         layout === "carousel"
@@ -376,6 +389,35 @@ const EmbedPage = () => {
                 </div>
               )}
             </div>
+            {embedType === "wall" && layout === "scrolling" && (
+              <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-gray-700 dark:text-gray-300">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={animation}
+                    onChange={(e) => setAnimation(e.target.checked)}
+                  />
+                  Auto-scroll
+                </label>
+                <label className="flex items-center gap-2">
+                  Speed
+                  <select
+                    className="rounded border bg-white p-2 dark:bg-gray-800"
+                    value={speed}
+                    disabled={!animation}
+                    onChange={(e) => setSpeed(e.target.value)}
+                  >
+                    <option value="slow">Slow</option>
+                    <option value="normal">Normal</option>
+                  </select>
+                </label>
+                <p className="w-full">
+                  A static wall is shown on mobile, for reduced-motion
+                  preferences, or with fewer than six testimonials. Hover or
+                  focus a card to pause.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Embed code */}
@@ -420,7 +462,9 @@ const EmbedPage = () => {
               <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
                 Live Preview
               </h3>
-              <div className={`overflow-hidden rounded-lg border dark:border-gray-600 ${embedType === "single" ? "mx-auto w-full max-w-[640px]" : ""}`}>
+              <div
+                className={`overflow-hidden rounded-lg border dark:border-gray-600 ${embedType === "single" ? "mx-auto w-full max-w-[640px]" : ""}`}
+              >
                 <iframe
                   id="embed-preview"
                   key={getEmbedUrl()}

@@ -1,5 +1,6 @@
 from flask import make_response, request
 from config.database import mysql
+from html import escape
 
 EMBED_CSS = """
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -85,6 +86,21 @@ body.ts-dark .ts-arrow { background: #374151; color: #fff; }
 .ts-arrow-left { left: -4px; }
 .ts-arrow-right { right: -4px; }
 
+/* Scrolling wall: static masonry is the accessible fallback. */
+.ts-scrolling-wall { columns: 3; column-gap: 16px; }
+.ts-scrolling-wall .ts-card { width: 100%; overflow-wrap: anywhere; box-shadow: 0 4px 16px #00000008; }
+.ts-scrolling-wall .ts-reviewer > div { min-width: 0; }
+.ts-scrolling-wall .ts-avatar, .ts-scrolling-wall .ts-avatar-placeholder { flex-shrink: 0; }
+.ts-scrolling-wall .ts-video { aspect-ratio: 16 / 9; background: #111827; object-fit: contain; }
+.ts-moving { display: flex; gap: 16px; columns: auto; }
+.ts-wall-column { flex: 1; min-width: 0; overflow: hidden; mask-image: linear-gradient(transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.ts-wall-track { display: flow-root; will-change: transform; }
+.ts-reading .ts-wall-column { overflow-y: auto; mask-image: none; }
+.ts-scrolling-wall button:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }
+@media (max-width: 991px) { .ts-scrolling-wall { columns: 2; } }
+@media (max-width: 631px) { .ts-scrolling-wall { columns: 1; } }
+@media (prefers-reduced-motion: reduce) { .ts-wall-track { transform: none !important; } }
+
 /* Grid */
 .ts-grid {
     display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
@@ -107,6 +123,10 @@ ARROW_RIGHT_SVG = '<svg width="16" height="16" fill="none" stroke="currentColor"
 
 def _render_card(t):
     """Render a single testimonial card as HTML string."""
+    t = dict(t)
+    for field in ("reviewer_name", "reviewer_image", "review", "video"):
+        t[field] = escape(str(t.get(field) or ""), quote=True)
+    t["attached_images"] = [escape(str(url), quote=True) for url in t.get("attached_images", [])]
     # Avatar
     if t['reviewer_image']:
         avatar = f'<img class="ts-avatar" src="{t["reviewer_image"]}" alt="{t["reviewer_name"]}">'
@@ -123,11 +143,11 @@ def _render_card(t):
         card_id = f'review-{t["id"]}'
         review_html = f'''<div class="ts-review-wrap">
         <p class="ts-review ts-clamped" id="{card_id}">{t["review"]}</p>
-        <button class="ts-show-more" data-target="{card_id}" style="display:none;">Show more</button>
+        <button class="ts-show-more" aria-expanded="false" aria-controls="{card_id}" data-target="{card_id}" style="display:none;">Show more</button>
     </div>'''
 
     # Video
-    video_html = f'<video class="ts-video" src="{t["video"]}" controls controlslist="nodownload"></video>' if t.get('video') else ''
+    video_html = f'<video preload="metadata" class="ts-video" src="{t["video"]}" controls controlslist="nodownload"></video>' if t.get('video') else ''
 
     # Attached images
     images_html = ''
@@ -207,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.style.display = 'inline';
         }
         btn.addEventListener('click', function() {
+            btn.setAttribute('aria-expanded', String(target.classList.contains('ts-clamped')));
             if (target.classList.contains('ts-clamped')) {
                 target.classList.remove('ts-clamped');
                 btn.textContent = 'Show less';
@@ -244,7 +265,7 @@ def render_wall_of_love(space_id):
     layout = request.args.get('layout', 'carousel')
     if theme not in ('light', 'dark'):
         theme = 'light'
-    if layout not in ('carousel', 'grid'):
+    if layout not in ('carousel', 'grid', 'scrolling'):
         layout = 'carousel'
 
     space, testimonials = _fetch_space_and_testimonials(space_id)
@@ -274,13 +295,17 @@ def render_wall_of_love(space_id):
     <div class="ts-carousel" id="ts-scroll">{cards_html}</div>
     <button class="ts-arrow ts-arrow-right" onclick="document.getElementById('ts-scroll').scrollBy({{left:320,behavior:'smooth'}})">{ARROW_RIGHT_SVG}</button>
 </div>'''
+    elif layout == 'scrolling':
+        animation = 'off' if request.args.get('animation') == 'off' else 'on'
+        speed = 'normal' if request.args.get('speed') == 'normal' else 'slow'
+        content = f'<div id="ts-wall" class="ts-scrolling-wall" data-animation="{animation}" data-speed="{speed}">{cards_html}</div>'
     else:
         content = f'<div class="ts-grid">{cards_html}</div>'
 
     footer = '<div class="ts-footer"><a href="/" target="_blank" rel="noopener noreferrer">Powered by TrustSphere</a></div>'
 
     body = f'<div class="ts-container">{header}{content}{footer}</div>'
-    html = _build_page(body, theme)
+    html = _build_page(body, theme, extra_js='<script src="/static/js/scrolling-wall.js"></script>' if layout == "scrolling" else "")
 
     response = make_response(html)
     response.headers['Content-Type'] = 'text/html'
