@@ -43,28 +43,37 @@ document.addEventListener('DOMContentLoaded', function () {
         wall.classList.remove('ts-moving');
         const count = wall.clientWidth >= 960 ? 3 : 2;
         if (wall.clientWidth < 600 || reduced.matches || wall.dataset.animation === 'off' || cards.length < 6) return;
-        for (let i = 0; i < count; i++) {
-            const viewport = document.createElement('div');
-            const track = document.createElement('div');
-            viewport.className = 'ts-wall-column';
-            track.className = 'ts-wall-track';
-            cards.filter((_, index) => index % count === i).forEach(card => track.append(card));
-            viewport.append(track);
-            wall.append(viewport);
-            columns.push({ viewport, track, offset: 0 });
-        }
-        wall.classList.add('ts-moving');
-        // Leave enough real content below the viewport for a seamless loop, without duplicate reviews.
-        const height = Math.min(560, ...columns.map(c => c.track.scrollHeight - Math.max(...Array.from(c.track.children).map(card => card.offsetHeight + 16))));
-        if (height < 120) {
+        const height = 560;
+        // Prefer three columns, but use two when that gives each loop enough content.
+        // Never shrink the reading area to compensate for a short column.
+        for (let columnCount = count; columnCount >= 2; columnCount--) {
             wall.replaceChildren(...cards);
-            wall.classList.remove('ts-moving');
             columns = [];
-            return;
+            for (let i = 0; i < columnCount; i++) {
+                const viewport = document.createElement('div');
+                const track = document.createElement('div');
+                viewport.className = 'ts-wall-column';
+                track.className = 'ts-wall-track';
+                cards.filter((_, index) => index % columnCount === i).forEach(card => track.append(card));
+                viewport.append(track);
+                wall.append(viewport);
+                columns.push({ viewport, track, offset: 0 });
+            }
+            wall.classList.add('ts-moving');
+            // Reserve the tallest card so every card order fills the viewport when cycling.
+            const available = Math.min(...columns.map(c => c.track.scrollHeight - Math.max(...Array.from(c.track.children).map(card => card.offsetHeight + 16))));
+            if (available >= height) {
+                columns.forEach(c => c.viewport.style.height = height + 'px');
+                schedule();
+                return;
+            }
         }
-        columns.forEach(c => c.viewport.style.height = height + 'px');
-        schedule();
+        // Too little content for a full loop: show every review as static masonry.
+        wall.replaceChildren(...cards);
+        wall.classList.remove('ts-moving');
+        columns = [];
     }
+
     wall.addEventListener('mouseenter', () => hovered = true);
     wall.addEventListener('mouseleave', () => hovered = false);
     // A focused card must be fully reachable even when it was outside the moving viewport.
