@@ -359,11 +359,12 @@ const VideoModal = ({
                 </div>
                 {spaceInfo.companyLogo &&
                   typeof spaceInfo.companyLogo === "string" && (
-                    <div className="relative h-10 md:max-w-[50%]">
+                    <div className="relative h-10 w-full max-w-[240px] md:max-w-[50%]">
                       <Image
                         src={spaceInfo.companyLogo}
                         alt="company logo"
                         fill
+                        unoptimized
                         className="object-contain object-left"
                       />
                     </div>
