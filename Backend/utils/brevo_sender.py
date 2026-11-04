@@ -6,7 +6,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 
-def send_brevo_email(subject, recipient, body, reply_to=None):
+def send_brevo_email(subject, recipient, body, reply_to=None, html_body=None):
     api_key = os.getenv("BREVO_API_KEY", "").strip()
     sender_email = os.getenv("BREVO_SENDER_EMAIL", "").strip()
     if not api_key or not sender_email:
@@ -23,6 +23,8 @@ def send_brevo_email(subject, recipient, body, reply_to=None):
     }
     if reply_to:
         payload["replyTo"] = {"email": reply_to}
+    if html_body is not None:
+        payload["htmlContent"] = html_body
 
     request = Request(
         "https://api.brevo.com/v3/smtp/email",

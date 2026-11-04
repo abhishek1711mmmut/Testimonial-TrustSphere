@@ -1,7 +1,7 @@
 from flask import jsonify, request, make_response, current_app
 from flask_jwt_extended import create_access_token, get_jwt_identity, set_access_cookies, unset_access_cookies
 from config.database import mysql
-from utils.email_templates import otp_email_body
+from utils.email_templates import otp_email_body, otp_email_html
 from utils.mailSender import send_email
 import random
 import bcrypt
@@ -85,7 +85,7 @@ def send_otp_logic():
     try:
         otp_code = f"{random.randint(100000, 999999)}"
         body = otp_email_body(otp_code)
-        email_response=send_email("OTP Verification", email, body)
+        email_response=send_email("OTP Verification", email, body, html_body=otp_email_html(otp_code))
         if not email_response["success"]:
             return jsonify(email_response), 500
         cursor = mysql.connection.cursor()

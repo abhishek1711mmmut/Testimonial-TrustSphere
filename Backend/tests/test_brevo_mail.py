@@ -5,6 +5,7 @@ from unittest.mock import patch
 from urllib.error import HTTPError, URLError
 
 from utils.mailSender import send_email
+from utils.email_templates import branded_email_html, otp_email_html
 
 
 class BrevoMailTests(unittest.TestCase):
@@ -32,6 +33,7 @@ class BrevoMailTests(unittest.TestCase):
         payload = json.loads(request.data)
         self.assertEqual(payload["to"], [{"email": "user@example.com"}])
         self.assertEqual(payload["textContent"], "123456")
+        self.assertIn("TrustSphere", payload["htmlContent"])
         self.assertNotIn("replyTo", payload)
         self.assertEqual(request.get_header("Api-key"), "test-secret")
         send_email("Support", "author@example.com", "Help", reply_to="visitor@example.com")
@@ -64,3 +66,14 @@ class BrevoMailTests(unittest.TestCase):
         response.status = 201
         response.read.return_value = b'{}'
         self.assertFalse(send_email("OTP", "user@example.com", "123456")["success"])
+
+    def test_html_escapes_visitor_content_and_renders_otp(self):
+        html = branded_email_html('<img src=x>', '<script>alert(1)</script>\nNext line')
+        self.assertNotIn('<script>', html)
+        self.assertNotIn('<img src=x>', html)
+        self.assertIn('&lt;script&gt;', html)
+        self.assertIn('<br>Next line', html)
+        otp = otp_email_html('123456')
+        self.assertIn('123456', otp)
+        self.assertIn('10 minutes', otp)
+        self.assertIn('never share', otp)

@@ -3,6 +3,7 @@ import logging
 import os
 
 from utils.brevo_sender import send_brevo_email
+from utils.email_templates import branded_email_html
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +11,7 @@ mail=Mail()
 def init_mail(app):
     mail.init_app(app)
 
-def send_email(subject, recipient, body, reply_to=None):
+def send_email(subject, recipient, body, reply_to=None, html_body=None):
     """
     Send through the selected provider while preserving the callers' contract.
 
@@ -20,9 +21,10 @@ def send_email(subject, recipient, body, reply_to=None):
         body (str): Body of the email.
     """
     try:
+        html_body = html_body if html_body is not None else branded_email_html(subject, body)
         provider = os.getenv('MAIL_PROVIDER', 'smtp').strip().lower()
         if provider == 'brevo':
-            send_brevo_email(subject, recipient, body, reply_to=reply_to)
+            send_brevo_email(subject, recipient, body, reply_to=reply_to, html_body=html_body)
             return {"success": True, "message": "Email sent successfully."}
         if provider != 'smtp':
             raise ValueError('Unsupported mail provider')
@@ -32,6 +34,7 @@ def send_email(subject, recipient, body, reply_to=None):
             recipients=[recipient],
             reply_to=reply_to)
         msg.body = body
+        msg.html = html_body
         mail.send(msg)
         return {"success": True, "message": "Email sent successfully."}
     except Exception as e:

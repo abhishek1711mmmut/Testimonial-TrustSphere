@@ -126,7 +126,8 @@ class SupportMailTests(unittest.TestCase):
             self.assertEqual(outbox[0].sender, "sender@example.com")
             self.assertEqual(outbox[0].recipients, ["author@example.com"])
             self.assertEqual(outbox[0].reply_to, "visitor@example.com")
-            self.assertIsNone(outbox[0].html)
+            self.assertIn("TrustSphere", outbox[0].html)
+            self.assertIn("Plain text", outbox[0].html)
             self.assertTrue(send_email("OTP", "user@example.com", "123456")["success"])
             self.assertIsNone(outbox[1].reply_to)
 
