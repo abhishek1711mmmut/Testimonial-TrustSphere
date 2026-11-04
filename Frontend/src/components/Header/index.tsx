@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import ThemeToggler from "./ThemeToggler";
 import { menuData, profileMenuData } from "./menuData";
@@ -13,6 +13,7 @@ import { logout } from "@/api/auth";
 const Header = () => {
   const { isAuth, userId, clearSession } = useAppContext();
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [showAttribution, setShowAttribution] = useState(true);
   const [dropdownToggler, setDropdownToggler] = useState(false);
   const [profileDropdown, setProfileDropdown] = useState(false); // Profile dropdown
 
@@ -20,6 +21,15 @@ const Header = () => {
   const pathUrl = usePathname();
   // List of pages where the navbar should be hidden
   const hideNavbarRoutes = "/collect";
+
+  useEffect(() => {
+    setShowAttribution(localStorage.getItem("trustsphere-attribution-dismissed") !== "true");
+  }, []);
+
+  const dismissAttribution = () => {
+    localStorage.setItem("trustsphere-attribution-dismissed", "true");
+    setShowAttribution(false);
+  };
 
   // Toggle profile dropdown menu
   const toggleProfileDropdown = () => {
@@ -41,8 +51,42 @@ const Header = () => {
     <>
       {!pathUrl.startsWith(hideNavbarRoutes) && (
         <header
-          className={`fixed left-0 top-0 z-999 w-full bg-white py-6 backdrop-blur-lg dark:bg-black/90`}
+          className={`fixed left-0 top-0 z-999 w-full bg-white py-4 backdrop-blur-lg dark:bg-black/90`}
         >
+          {showAttribution && (
+            <div className="mb-4 border-b border-stroke pb-3 dark:border-strokedark">
+              <div className="mx-auto flex max-w-c-1390 items-center justify-center gap-2 px-4 text-center text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
+                <span>
+                  Built by{" "}
+                  <a
+                    href="https://github.com/abhishek1711mmmut"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-primary hover:underline"
+                  >
+                    Abhishek Kumar
+                  </a>
+                  <span aria-hidden="true"> · </span>
+                  <a
+                    href="https://github.com/abhishek1711mmmut"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary hover:underline"
+                  >
+                    View source on GitHub
+                  </a>
+                </span>
+                <button
+                  type="button"
+                  onClick={dismissAttribution}
+                  aria-label="Dismiss creator attribution"
+                  className="rounded p-1 text-lg leading-none text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary dark:hover:bg-gray-800 dark:hover:text-white"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+            </div>
+          )}
           <div className="relative mx-auto max-w-c-1390 items-center justify-between px-4 md:px-8 lg:flex 2xl:px-0">
             <div className="flex w-full items-center justify-between lg:w-1/4">
               <a href="/">

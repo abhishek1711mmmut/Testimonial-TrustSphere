@@ -302,7 +302,7 @@ def render_wall_of_love(space_id):
     else:
         content = f'<div class="ts-grid">{cards_html}</div>'
 
-    footer = '<div class="ts-footer"><a href="/" target="_blank" rel="noopener noreferrer">Powered by TrustSphere</a></div>'
+    footer = '<div class="ts-footer"><a href="/" target="_blank" rel="noopener noreferrer">Powered by TrustSphere</a><span aria-hidden="true"> · </span><a href="https://github.com/abhishek1711mmmut" target="_blank" rel="noopener noreferrer">Created by Abhishek Kumar</a></div>'
 
     body = f'<div class="ts-container">{header}{content}{footer}</div>'
     html = _build_page(body, theme, extra_js='<script src="/static/js/scrolling-wall.js"></script>' if layout == "scrolling" else "")
@@ -325,7 +325,7 @@ def render_single_testimonial(space_id, testimonial_id):
         return response
 
     card_html = _render_card(testimonials[0])
-    footer = '<div class="ts-footer"><a href="/" target="_blank" rel="noopener noreferrer">Powered by TrustSphere</a></div>'
+    footer = '<div class="ts-footer"><a href="/" target="_blank" rel="noopener noreferrer">Powered by TrustSphere</a><span aria-hidden="true"> · </span><a href="https://github.com/abhishek1711mmmut" target="_blank" rel="noopener noreferrer">Created by Abhishek Kumar</a></div>'
     body = f'<div class="ts-container">{card_html}{footer}</div>'
     html = _build_page(body, theme, single=True)
 

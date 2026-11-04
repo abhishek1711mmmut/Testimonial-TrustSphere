@@ -252,6 +252,17 @@ const Footer = () => {
 
             {/* <!-- Footer Bottom --> */}
             <div className="flex flex-col flex-wrap items-center justify-center gap-5 border-t border-stroke py-7 dark:border-strokedark lg:flex-row lg:justify-between lg:gap-0">
+              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                TrustSphere · Created by{" "}
+                <a
+                  href="https://github.com/abhishek1711mmmut"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  Abhishek Kumar
+                </a>
+              </p>
               <motion.div
                 variants={{
                   hidden: {
