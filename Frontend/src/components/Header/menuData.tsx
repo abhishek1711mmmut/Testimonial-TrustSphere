@@ -71,12 +71,6 @@ const profileMenuData: Menu[] = [
     newTab: false,
     path: "/dashboard/overview",
   },
-  {
-    id: 2,
-    title: "Settings",
-    newTab: false,
-    path: "/dashboard/settings",
-  },
 ];
 
 export { menuData, profileMenuData };
