@@ -211,7 +211,7 @@ const Footer = () => {
                       href="https://github.com/abhishek1711mmmut"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-stroke px-5 py-3 font-medium text-black transition hover:border-primary hover:text-primary dark:border-strokedark dark:text-white"
+                      className="github-glow-button inline-flex items-center gap-2 rounded-full border border-transparent px-5 py-3 font-medium text-black transition hover:text-primary dark:text-white"
                     >
                       View project on GitHub <span aria-hidden="true">→</span>
                     </a>
