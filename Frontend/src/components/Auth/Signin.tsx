@@ -4,10 +4,12 @@ import { useAppContext } from "@/context/AppContext";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 const Signin = () => {
   const { setSession, clearSession } = useAppContext();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submitting = useRef(false);
 
@@ -25,8 +27,8 @@ const Signin = () => {
       const user = await login(data);
       if (user) {
         setSession(user);
-        // A fresh document request avoids cached unauthenticated route redirects.
-        window.location.replace("/dashboard/overview");
+        // Keep the authenticated context alive during client-side navigation.
+        router.push("/dashboard/overview");
       }
     } finally {
       submitting.current = false;

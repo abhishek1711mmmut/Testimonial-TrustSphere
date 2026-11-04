@@ -89,6 +89,11 @@ def send_otp_logic():
         if not email_response["success"]:
             return jsonify(email_response), 500
         cursor = mysql.connection.cursor()
+        # TiDB does not support MySQL scheduled events. Expired OTP cleanup is
+        # performed opportunistically when a new OTP is requested instead.
+        cursor.execute(
+            "DELETE FROM otp WHERE created_at < NOW() - INTERVAL 10 MINUTE"
+        )
         cursor.execute(
             "INSERT INTO otp (email, otp_code) VALUES (%s, %s) "
             "ON DUPLICATE KEY UPDATE otp_code = %s, created_at = CURRENT_TIMESTAMP",

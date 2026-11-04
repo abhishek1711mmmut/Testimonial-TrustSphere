@@ -5,7 +5,18 @@ from config import database
 from utils.mailSender import init_mail
 from flask_cors import CORS
 import os
-import ssl
+
+
+def _system_ca_path():
+    """Return a common system CA bundle path for mysqlclient TLS verification."""
+    for path in (
+        os.getenv("MYSQL_SSL_CA"),
+        "/etc/ssl/certs/ca-certificates.crt",  # Debian/Ubuntu and most Linux hosts
+        "/etc/ssl/cert.pem",  # macOS and Alpine
+    ):
+        if path and os.path.isfile(path):
+            return path
+    return None
 
 # Load environment variables
 load_dotenv()
@@ -28,10 +39,13 @@ app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT', 3306))
 
 if os.getenv('MYSQL_SSL', 'false').lower() == 'true':
-    app.config['MYSQL_CUSTOM_OPTIONS'] = {
-        'ssl': {'ca': None},
-        'ssl_mode': 'REQUIRED',
-    }
+    # TiDB Cloud Starter public endpoints require TLS. VERIFY_IDENTITY checks
+    # both the certificate chain and that it belongs to MYSQL_HOST.
+    ssl_options = {'ssl_mode': 'VERIFY_IDENTITY'}
+    ca_path = _system_ca_path()
+    if ca_path:
+        ssl_options['ssl'] = {'ca': ca_path}
+    app.config['MYSQL_CUSTOM_OPTIONS'] = ssl_options
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['CORS_HEADERS'] = 'Content-Type'
 # Configure Flask-Mail with your email settings
