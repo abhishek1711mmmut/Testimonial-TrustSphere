@@ -72,6 +72,7 @@ const Signup = () => {
               Create an Account
             </h2>
 
+            {/* Social sign-up buttons are hidden until OAuth is implemented.
             <div className="flex items-center gap-8">
               <button
                 aria-label="signup with google"
@@ -131,6 +132,7 @@ const Signup = () => {
                 Signup with Github
               </button>
             </div>
+            */}
 
             <div className="mb-10 flex items-center justify-center">
               <span className="dark:bg-stroke-dark hidden h-[1px] w-full max-w-[200px] bg-stroke dark:bg-strokedark sm:block"></span>

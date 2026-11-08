@@ -78,6 +78,7 @@ const Signin = () => {
             <h2 className="mb-15 text-center text-3xl font-semibold text-black dark:text-white xl:text-sectiontitle2">
               Login to Your Account
             </h2>
+            {/* Social sign-in buttons are hidden until OAuth is implemented.
             <div className="flex flex-col">
               <div className="flex items-center gap-8">
                 <button
@@ -139,6 +140,7 @@ const Signin = () => {
                 </button>
               </div>
             </div>
+            */}
             <div className="mb-10 flex items-center justify-center">
               <span className="dark:bg-stroke-dark hidden h-[1px] w-full max-w-[200px] bg-stroke dark:bg-strokedark sm:block"></span>
               <p className="text-body-color dark:text-body-color-dark w-full px-5 text-center text-base">
