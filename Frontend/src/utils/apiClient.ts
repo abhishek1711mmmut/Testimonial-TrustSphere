@@ -1,6 +1,12 @@
 import axios from "axios";
 import { startLoading, stopLoading } from "./loadingStore";
 
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    skipGlobalLoading?: boolean;
+  }
+}
+
 const apiClient = axios.create({
   // Next.js forwards /api requests to Flask on the server.
   baseURL: "/",
@@ -11,17 +17,17 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  startLoading();
+  if (!config.skipGlobalLoading) startLoading();
   return config;
 });
 
 apiClient.interceptors.response.use(
   (response) => {
-    stopLoading();
+    if (!response.config.skipGlobalLoading) stopLoading();
     return response;
   },
   (error) => {
-    stopLoading();
+    if (!error.config?.skipGlobalLoading) stopLoading();
     if (
       error.response?.status === 401 &&
       error.config?.url !== "/api/auth/login"

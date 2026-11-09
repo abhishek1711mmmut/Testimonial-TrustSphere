@@ -46,6 +46,7 @@ export const readSession = async (
   const { data } = await apiClient.get("/api/auth/user", {
     signal,
     timeout: 15000,
+    skipGlobalLoading: true,
     headers: { "Cache-Control": "no-cache" },
   });
   if (data.success !== true || !data.data?.email) {
