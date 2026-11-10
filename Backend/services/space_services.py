@@ -75,33 +75,53 @@ def delete_space_logic(space_id):
 
 
 def edit_space_logic(space_id):
-    # Extracting data from the request
     user_id = get_jwt_identity()
-    # space_id = request.form.get('space_id')
-    spaceName = request.form.get('spaceName')
-    companyLogo = request.files.get('companyLogo')
-    headerTitle = request.form.get('headerTitle')
-    customMessage = request.form.get('customMessage')
+    space_name = request.form.get('spaceName', '').strip()
+    header_title = request.form.get('headerTitle', '').strip()
+    custom_message = request.form.get('customMessage', '').strip()
     questions = request.form.getlist('questions')
+    company_logo = request.files.get('companyLogo')
+    remove_company_logo = request.form.get('removeCompanyLogo') == 'true'
 
+    if not space_name or not header_title or not custom_message:
+        return jsonify({"message": "Please fill all the required fields", "success": "false"}), 400
+
+    cursor = None
     try:
         cursor = mysql.connection.cursor()
-        # Check if the space exists and belongs to the user
         cursor.execute("SELECT * FROM spaces WHERE id = %s AND user_id = %s", (space_id, user_id))
         space = cursor.fetchone()
         if space is None:
             cursor.close()
             return jsonify({"message": "Space not found", "success": "false"}), 404
-        # Update the space details in the database
+
+        cursor.execute(
+            "SELECT id FROM spaces WHERE spaceName = %s AND user_id = %s AND id <> %s",
+            (space_name, user_id, space_id),
+        )
+        if cursor.fetchone():
+            cursor.close()
+            return jsonify({"message": "Space name already exists", "success": "false"}), 400
+
+        company_logo_url = space[2]
+        if company_logo:
+            upload_result = cloudinary.uploader.upload(company_logo, folder="Testimonials")
+            company_logo_url = upload_result['secure_url']
+        elif remove_company_logo:
+            company_logo_url = None
+
         cursor.execute("""
             UPDATE spaces
             SET spaceName = %s, companyLogo = %s, headerTitle = %s, customMessage = %s, questions = %s
             WHERE id = %s AND user_id = %s
-        """, (spaceName, companyLogo, headerTitle, customMessage, ",".join(questions), space_id, user_id))
+        """, (space_name, company_logo_url, header_title, custom_message, ",".join(questions), space_id, user_id))
         mysql.connection.commit()
         cursor.close()
         return jsonify({"message": "Space updated successfully", "success": "true"}), 200
     except Exception as e:
+        mysql.connection.rollback()
+        if cursor:
+            cursor.close()
         return jsonify({"message": "Unable to update space", "success": "false", "error": str(e)}), 500
 
 

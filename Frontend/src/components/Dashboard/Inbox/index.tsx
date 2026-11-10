@@ -6,6 +6,7 @@ import Image from "next/image";
 import { getSpaces } from "@/api/spaces";
 import { Space } from "@/types/reviewSpace";
 import toast from "react-hot-toast";
+import CreateSpaceModal from "../Overview/Modal/CreateSpaceModal";
 
 const Inbox = () => {
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -15,6 +16,7 @@ const Inbox = () => {
     id: number;
     name: string;
   } | null>(null);
+  const [spaceToEdit, setSpaceToEdit] = useState<Space | null>(null);
 
   const fetchSpaces = async () => {
     const res = await getSpaces();
@@ -44,6 +46,11 @@ const Inbox = () => {
 
   const handleDeleteSuccess = () => {
     handleClose();
+    fetchSpaces();
+  };
+
+  const handleEditSuccess = () => {
+    setSpaceToEdit(null);
     fetchSpaces();
   };
 
@@ -103,6 +110,7 @@ const Inbox = () => {
               <button
                 className="mt-6 inline-flex shrink-0 items-center gap-2 rounded-lg border border-primary px-4 py-2 text-primary transition hover:bg-primaryho hover:text-white md:mt-0"
                 type="button"
+                onClick={() => setSpaceToEdit(space)}
               >
                 Edit
               </button>
@@ -123,6 +131,13 @@ const Inbox = () => {
           spaceId={selectedSpace.id}
           spaceName={selectedSpace.name}
           onDelete={handleDeleteSuccess}
+        />
+      )}
+      {spaceToEdit && (
+        <CreateSpaceModal
+          space={spaceToEdit}
+          onClose={() => setSpaceToEdit(null)}
+          onSubmit={handleEditSuccess}
         />
       )}
     </div>

@@ -2,27 +2,30 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { SpaceInfo } from "@/types/reviewSpace";
-import { createSpace } from "@/api/spaces";
+import { Space, SpaceInfo } from "@/types/reviewSpace";
+import { createSpace, editSpace } from "@/api/spaces";
 
 type ModalProps = {
   onSubmit: (spaceData: { id: number; name: string }) => void;
   onClose: () => void;
+  space?: Space;
 };
 
-const Modal = ({ onSubmit, onClose }: ModalProps) => {
+const Modal = ({ onSubmit, onClose, space }: ModalProps) => {
+  const isEditing = Boolean(space);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [spaceInfo, setSpaceInfo] = useState<SpaceInfo>({
-    spaceName: "",
-    companyLogo: null,
-    headerTitle: "",
-    customMessage: "",
-    questions: [
+    spaceName: space?.spaceName ?? "",
+    companyLogo: space?.companyLogo ?? null,
+    headerTitle: space?.headerTitle ?? "",
+    customMessage: space?.customMessage ?? "",
+    questions: space?.questions ?? [
       "Who are you / what are you working on?",
       "How has [our product / service] helped you?",
       "What is the best thing about [our product / service]?",
     ],
   });
+  const [removeCompanyLogo, setRemoveCompanyLogo] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -61,6 +64,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
         ...prevInfo,
         companyLogo: file,
       }));
+      setRemoveCompanyLogo(false);
     } else {
       // Handle the case where no file is selected (optional)
       console.log("No file selected");
@@ -79,7 +83,8 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
 
   // Handler to delete the company logo
   const deleteCompanyLogo = () => {
-    setSpaceInfo({ ...spaceInfo, companyLogo: null });
+    setSpaceInfo((prevInfo) => ({ ...prevInfo, companyLogo: null }));
+    setRemoveCompanyLogo(true);
     // Reset the file input value (optional for some browsers)
     const companyLogoInput = inputRef.current;
     if (companyLogoInput) {
@@ -98,10 +103,16 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
     if (spaceInfo.companyLogo instanceof File) {
       formData.append("companyLogo", spaceInfo.companyLogo);
     }
-    const result = await createSpace(formData);
+    if (removeCompanyLogo) formData.append("removeCompanyLogo", "true");
+    const result = isEditing && space
+      ? await editSpace(space.id, formData)
+      : await createSpace(formData);
     setIsSubmitting(false);
     if (result) {
-      onSubmit({ id: result.data?.id, name: spaceInfo.spaceName });
+      const submittedSpaceId = result.data?.id ?? space?.id;
+      if (submittedSpaceId !== undefined) {
+        onSubmit({ id: submittedSpaceId, name: spaceInfo.spaceName });
+      }
     }
   };
 
@@ -153,7 +164,7 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
 
           <div className="rounded-lg bg-white px-7.5 py-7.5 shadow-solid-8 dark:border dark:border-strokedark dark:bg-black xl:px-15 xl:pt-15">
             <h2 className="mb-15 text-center text-3xl font-semibold text-black dark:text-white xl:text-sectiontitle2">
-              Create an Space
+              {isEditing ? "Edit Space" : "Create a Space"}
             </h2>
 
             <form onSubmit={handleSubmit}>
@@ -212,11 +223,19 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
                         </button>
                       )}
                       {/* displaying the preview of the company logo */}
-                      {spaceInfo.companyLogo && spaceInfo.companyLogo instanceof File ? (
+                      {spaceInfo.companyLogo instanceof File ? (
                         <Image
                           src={URL.createObjectURL(spaceInfo.companyLogo)}
                           alt="company logo"
                           fill
+                          className="h-full w-full rounded-lg object-contain"
+                        />
+                      ) : spaceInfo.companyLogo ? (
+                        <Image
+                          src={spaceInfo.companyLogo}
+                          alt={`${spaceInfo.spaceName} logo`}
+                          fill
+                          unoptimized
                           className="h-full w-full rounded-lg object-contain"
                         />
                       ) : (
@@ -395,7 +414,9 @@ const Modal = ({ onSubmit, onClose }: ModalProps) => {
                   aria-label="submit your space form"
                   className="inline-flex items-center gap-2.5 rounded-full bg-primary px-6 py-3 font-medium text-white duration-300 ease-in-out hover:bg-primaryho disabled:opacity-50 dark:bg-primary dark:hover:bg-primaryho"
                 >
-                  {isSubmitting ? "Creating..." : "Submit"}
+                  {isSubmitting
+                    ? isEditing ? "Saving..." : "Creating..."
+                    : isEditing ? "Save Changes" : "Create Space"}
                   {/* right arrow icon */}
                   <svg
                     className="fill-white"
